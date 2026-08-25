@@ -37,13 +37,13 @@ export default function MediaLibrary() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">Central Media Library</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Central Media Library</h1>
           <p className="text-xs text-slate-400 mt-1">Upload Images, PDFs, and Copy Direct CDN Asset URLs for Page Content</p>
         </div>
 
-        <label className="btn-primary py-2.5 px-4 text-xs cursor-pointer inline-flex items-center gap-2">
+        <label className="btn-primary py-2.5 px-4 text-xs cursor-pointer inline-flex items-center justify-center gap-2 w-full sm:w-auto">
           <Upload className="w-4 h-4" />
           <span>{uploading ? 'Uploading Asset...' : 'Upload Media Asset'}</span>
           <input type="file" onChange={handleFileUpload} className="hidden" accept="image/*,application/pdf" />
@@ -51,7 +51,7 @@ export default function MediaLibrary() {
       </div>
 
       {/* Grid of Media Assets */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {mediaItems.map((item) => (
           <div key={item.id} className="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between group">
             <div className="h-40 rounded-lg overflow-hidden mb-3 bg-slate-900 flex items-center justify-center relative">

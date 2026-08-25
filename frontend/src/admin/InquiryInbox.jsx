@@ -19,13 +19,13 @@ export default function InquiryInbox() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-extrabold text-white">B2B Leads & Inquiries Inbox</h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">B2B Leads & Inquiries Inbox</h1>
         <p className="text-xs text-slate-400 mt-1">Manage High-Intent Client Submissions Sent via Contact Form</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Inbox List */}
-        <div className="lg:col-span-5 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col gap-3">
+        <div className="lg:col-span-5 glass-panel p-4 sm:p-6 rounded-2xl border border-white/10 flex flex-col gap-3">
           <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2">Received Leads ({inquiries.length})</h3>
 
           <div className="space-y-2">
@@ -52,10 +52,10 @@ export default function InquiryInbox() {
         </div>
 
         {/* Right Lead Detail View */}
-        <div className="lg:col-span-7 glass-panel p-6 md:p-8 rounded-2xl border border-white/10 space-y-6">
+        <div className="lg:col-span-7 glass-panel p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 space-y-6">
           {selectedInquiry ? (
             <>
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
                 <div>
                   <h2 className="text-xl font-bold text-white">{selectedInquiry.name}</h2>
                   <span className="text-xs text-indigo-400 flex items-center gap-1.5 mt-0.5">
@@ -63,12 +63,12 @@ export default function InquiryInbox() {
                     {selectedInquiry.email}
                   </span>
                 </div>
-                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">
+                <span className="self-start sm:self-auto px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">
                   Status: {selectedInquiry.status || 'NEW'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-300">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-300">
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase block">Company / SME</span>
                   <span className="font-semibold text-white">{selectedInquiry.company || 'Not Specified'}</span>

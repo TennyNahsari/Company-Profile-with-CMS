@@ -76,12 +76,12 @@ export default function ServiceManager() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">Service Capabilities Manager</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Service Capabilities Manager</h1>
           <p className="text-xs text-slate-400 mt-1">Manage Agency Service Offerings, Slugs, Descriptions, and Deliverables</p>
         </div>
-        <button onClick={handleCreateNew} className="btn-primary py-2.5 px-4 text-xs">
+        <button onClick={handleCreateNew} className="btn-primary py-2.5 px-4 text-xs w-full sm:w-auto justify-center">
           <Plus className="w-4 h-4 mr-1" />
           Create New Service
         </button>

@@ -57,29 +57,29 @@ export default function HeroSlider() {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4 mx-auto">
-            <a href={currentSlide.cta_link || '#portfolio'} className="btn-primary">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-4 w-full sm:w-auto mx-auto">
+            <a href={currentSlide.cta_link || '#portfolio'} className="btn-primary w-full sm:w-auto justify-center">
               <span>{currentSlide.cta_text || 'Explore Our Work'}</span>
               <ArrowRight className="w-5 h-5" />
             </a>
-            <a href="#contact" className="btn-secondary">
+            <a href="#contact" className="btn-secondary w-full sm:w-auto justify-center">
               Book Strategy Session
             </a>
           </div>
 
           {/* Key Metric Highlights */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-16 w-full max-w-3xl mx-auto glass-panel p-6 rounded-2xl border border-white/10 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-12 sm:mt-16 w-full max-w-3xl mx-auto glass-panel p-4 sm:p-6 rounded-2xl border border-white/10 text-center">
             <div className="flex flex-col items-center justify-center">
-              <span className="text-3xl md:text-4xl font-extrabold text-indigo-400">99.4%</span>
-              <span className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Client Satisfaction</span>
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-indigo-400">99.4%</span>
+              <span className="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Client Satisfaction</span>
             </div>
             <div className="flex flex-col items-center justify-center">
-              <span className="text-3xl md:text-4xl font-extrabold text-purple-400">3.8x</span>
-              <span className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Average ROI Growth</span>
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-purple-400">3.8x</span>
+              <span className="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Average ROI Growth</span>
             </div>
             <div className="col-span-2 md:col-span-1 flex flex-col items-center justify-center">
-              <span className="text-3xl md:text-4xl font-extrabold text-sky-400">120+</span>
-              <span className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Global Deployments</span>
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-sky-400">120+</span>
+              <span className="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider mt-1 text-center">Global Deployments</span>
             </div>
           </div>
 

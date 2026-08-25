@@ -51,7 +51,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
           </div>
           <div>
             <h2 className="font-heading text-sm font-extrabold text-white">CMS Admin</h2>
-            <span className="text-[10px] text-indigo-400 font-semibold block">{activeItem.label}</span>
+            <span className="text-[10px] text-indigo-400 font-semibold block truncate max-w-[180px] sm:max-w-xs">{activeItem.label}</span>
           </div>
         </div>
 

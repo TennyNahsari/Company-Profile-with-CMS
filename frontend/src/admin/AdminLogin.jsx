@@ -24,8 +24,8 @@ export default function AdminLogin({ onLoginSuccess, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-lg animate-in fade-in">
-      <div className="glass-panel w-full max-w-md p-8 rounded-3xl border border-indigo-500/30 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/90 backdrop-blur-lg animate-in fade-in">
+      <div className="glass-panel w-full max-w-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-indigo-500/30 shadow-2xl relative max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
         <div className="text-center mb-8">

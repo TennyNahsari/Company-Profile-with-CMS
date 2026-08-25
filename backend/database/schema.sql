@@ -39,7 +39,7 @@ INSERT INTO service_categories (id, name, slug, description, order_index) VALUES
 (3, 'Growth & SEO Marketing', 'growth-seo-marketing', 'Data-driven search engine optimization and B2B conversion marketing', 3),
 (4, 'Brand Strategy', 'brand-strategy-category', 'Enterprise brand positioning and corporate visual identity', 4)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('service_categories_id_seq', (SELECT MAX(id) FROM service_categories));
+SELECT setval('service_categories_id_seq', COALESCE((SELECT MAX(id) FROM service_categories), 1));
 
 -- 3. Portfolio Categories Table
 CREATE TABLE IF NOT EXISTS portfolio_categories (
@@ -56,7 +56,7 @@ INSERT INTO portfolio_categories (id, name, slug, description, order_index) VALU
 (3, 'Digital Marketing', 'digital-marketing', 'Growth campaigns and SEO strategy', 3),
 (4, 'Mobile Apps', 'mobile-apps', 'Native & cross-platform applications', 4)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('portfolio_categories_id_seq', (SELECT MAX(id) FROM portfolio_categories));
+SELECT setval('portfolio_categories_id_seq', COALESCE((SELECT MAX(id) FROM portfolio_categories), 1));
 
 -- 4. Users Table (Admin Credentials)
 CREATE TABLE IF NOT EXISTS users (
@@ -90,7 +90,7 @@ INSERT INTO sliders (id, title, subtitle, badge_text, image_url, cta_text, cta_l
 (1, 'Aetheric Digital Engineering', 'We engineer high-speed React web applications, intuitive UI/UX design systems, and conversion-focused growth marketing.', 'NEXT-GEN AGENCY', 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200', 'Explore Capabilities', '#services', 1, true),
 (2, 'Enterprise Web Architecture', 'Building resilient Node & Express cloud microservices backends powered by PostgreSQL enterprise databases.', 'REACT & NODE EXCELLENCE', 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200', 'View Case Studies', '#portfolio', 2, true)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('sliders_id_seq', (SELECT MAX(id) FROM sliders));
+SELECT setval('sliders_id_seq', COALESCE((SELECT MAX(id) FROM sliders), 1));
 
 -- 6. Services Table
 CREATE TABLE IF NOT EXISTS services (
@@ -111,7 +111,7 @@ INSERT INTO services (id, title, slug, category_id, icon_name, summary, descript
 (2, 'React & Node Web Apps', 'react-node-web-apps', 2, 'Code', 'Full-stack application development using modern React 18, Vite, Express.js microservices, and PostgreSQL database architecture.', '<h2>High-Speed Technical Architecture</h2><p>We build ultra-fast, search engine optimized web platforms that handle enterprise traffic with ease.</p>', '["React 18 & Vite SPA Architecture", "Node & Express.js REST APIs", "PostgreSQL Database Design", "Production CPanel & Cloud Deployment"]'::jsonb, 2),
 (3, 'SEO & Digital Growth Marketing', 'seo-digital-growth-marketing', 3, 'TrendingUp', 'Data-driven search engine optimization, technical site audits, and targeted B2B client acquisition campaigns.', '<h2>Dominate Search Engine Rankings</h2><p>Increase your organic reach with our technical SEO audits, keyword research, and conversion rate optimization (CRO) strategies.</p>', '["Technical SEO & Core Web Vitals Audit", "Keyword Strategy & Content Architecture", "Conversion Rate Optimization (CRO)", "Analytics & Performance Tracking"]'::jsonb, 3)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('services_id_seq', (SELECT MAX(id) FROM services));
+SELECT setval('services_id_seq', COALESCE((SELECT MAX(id) FROM services), 1));
 
 -- 7. Portfolio Projects Table
 CREATE TABLE IF NOT EXISTS projects (
@@ -133,7 +133,7 @@ INSERT INTO projects (id, title, slug, client_name, category_id, category, thumb
 (1, 'Global Ecommerce Performance Campaign', 'global-ecommerce-performance-campaign', 'Luminary Apparel', 3, 'Digital Marketing', 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1000', 'Multi-channel acquisition strategy driving 4.2x ROAS across European markets.', '{"conversion_lift": "+140%", "revenue_growth": "$3.2M", "roas_multiplier": "4.2x"}'::jsonb, '<h2>Overview & Challenge</h2><p>Luminary Apparel needed a scalable growth strategy to expand into European markets while maintaining strong profit margins.</p><h2>Our Strategy</h2><p>We deployed targeted performance marketing, CRO optimization, and localized landing pages.</p>', true),
 (2, 'Fintech Neobank Web Portal', 'fintech-neobank-portal', 'Aura Financial', 2, 'Web Development', 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=1000', 'High-security React dashboard and customer onboarding portal handling $50M+ monthly volume.', '{"active_users": "250K+", "latency_reduction": "-65%", "security_compliance": "SOC-2"}'::jsonb, '<h2>Technical Architecture</h2><p>Built on React, Node.js, and encrypted PostgreSQL infrastructure to deliver sub-second response times.</p>', true)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('projects_id_seq', (SELECT MAX(id) FROM projects));
+SELECT setval('projects_id_seq', COALESCE((SELECT MAX(id) FROM projects), 1));
 
 -- 8. Categories Table (for Blog)
 CREATE TABLE IF NOT EXISTS categories (
@@ -147,7 +147,7 @@ INSERT INTO categories (id, name, slug) VALUES
 (2, 'Web Engineering', 'web-engineering'),
 (3, 'Growth Marketing', 'growth-marketing')
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('categories_id_seq', (SELECT MAX(id) FROM categories));
+SELECT setval('categories_id_seq', COALESCE((SELECT MAX(id) FROM categories), 1));
 
 -- 9. Posts Table (Blog Articles)
 CREATE TABLE IF NOT EXISTS posts (
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS posts (
 INSERT INTO posts (id, title, slug, category_id, excerpt, content_html, featured_image, meta_title, meta_desc, status) VALUES
 (1, 'The Future of B2B Web Design in 2026', 'future-of-b2b-web-design-2026', 1, 'Discover how modern React applications, micro-animations, and AI-driven personalization are reshaping B2B client acquisition.', '<h2>The Shift Toward Performance-First Design</h2><p>In 2026, enterprise clients demand lightning-fast web experiences. Slow load times directly hurt conversion rates and Google search rankings.</p>', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000', 'The Future of B2B Web Design in 2026 | DigiAgency', 'How React and performance-first design transform B2B web applications.', 'PUBLISHED')
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('posts_id_seq', (SELECT MAX(id) FROM posts));
+SELECT setval('posts_id_seq', COALESCE((SELECT MAX(id) FROM posts), 1));
 
 -- 10. Pages Table (Page Builder)
 CREATE TABLE IF NOT EXISTS pages (
@@ -198,7 +198,7 @@ INSERT INTO menus (id, label, url, order_index, is_external) VALUES
 (5, 'Insights', '#blog', 5, false),
 (6, 'Contact', '#contact', 6, false)
 ON CONFLICT (id) DO NOTHING;
-SELECT setval('menus_id_seq', (SELECT MAX(id) FROM menus));
+SELECT setval('menus_id_seq', COALESCE((SELECT MAX(id) FROM menus), 1));
 
 -- 12. Media Library Table
 CREATE TABLE IF NOT EXISTS media (
