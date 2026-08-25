@@ -55,11 +55,11 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
   }
 
   return (
-    <article className="subpage-top-clearance min-h-screen pb-28 w-full flex flex-col items-center">
+    <article className="subpage-top-clearance category-page-container min-h-screen w-full flex flex-col items-center">
       <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="category-back-btn-box">
           <button 
             onClick={onBack}
             className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all shadow-lg"
@@ -70,23 +70,23 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
         </div>
 
         {/* Category Header Banner */}
-        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-indigo-500/30 shadow-2xl mb-12 w-full text-center flex flex-col items-center relative overflow-hidden">
+        <div className="glass-panel category-header-banner border border-indigo-500/30 shadow-2xl w-full text-center flex flex-col items-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10" />
-          <div className="badge-glow mb-3 mx-auto">Service Category</div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 text-center">
+          <div className="badge-glow category-banner-badge mx-auto">Service Category</div>
+          <h1 className="font-extrabold text-white text-center category-banner-title">
             {category?.name || 'Category Offerings'}
           </h1>
-          <p className="text-slate-300 text-sm md:text-base max-w-2xl text-center leading-relaxed">
+          <p className="text-slate-300 text-center category-banner-subtitle">
             {category?.description || `Explore our specialized ${category?.name || ''} capabilities engineered for high performance and B2B growth.`}
           </p>
-          <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-4 py-1.5 rounded-full border border-indigo-500/20">
+          <div className="category-banner-count inline-flex items-center gap-2 font-semibold text-indigo-400 bg-indigo-500/10 rounded-full border border-indigo-500/20">
             <Layers className="w-3.5 h-3.5" />
             <span>{services.length} Services Available in this Category</span>
           </div>
         </div>
 
         {/* Services Grid for this Category */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <div className="category-grid-layout">
           {services.map((service) => {
             const IconComponent = iconMap[service.icon_name] || Layout;
             const features = typeof service.features === 'string' ? JSON.parse(service.features) : (service.features || []);
@@ -95,26 +95,26 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
               <div 
                 key={service.id} 
                 onClick={() => handleServiceDetailClick(service.slug)}
-                className="glass-card p-8 flex flex-col justify-between group relative overflow-hidden cursor-pointer"
+                className="glass-card category-card-item service-card-item group relative overflow-hidden cursor-pointer"
               >
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
-                    <IconComponent className="w-7 h-7" />
+                  <div className="service-card-icon-wrapper bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                    <IconComponent className="w-6 h-6" />
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-3 flex items-center justify-between">
+                  <h3 className="text-white flex items-center justify-between service-card-title">
                     <span>{service.title}</span>
-                    <ArrowUpRight className="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-all" />
+                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-all shrink-0 ml-2" />
                   </h3>
 
-                  <p className="text-xs text-slate-300 mb-6 leading-relaxed line-clamp-3">
+                  <p className="service-card-summary line-clamp-3">
                     {service.summary}
                   </p>
 
-                  <div className="space-y-2 mb-6">
+                  <div className="service-card-features-list">
                     {features.slice(0, 3).map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-400">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                      <div key={idx} className="service-card-feature-item">
+                        <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -123,7 +123,7 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
 
                 <button
                   onClick={(e) => { e.stopPropagation(); handleServiceDetailClick(service.slug); }}
-                  className="w-full text-center text-xs font-bold text-indigo-400 hover:text-indigo-300 py-3 rounded-xl border border-indigo-500/20 hover:border-indigo-500/50 bg-indigo-500/5 transition-all"
+                  className="service-card-button text-center font-bold text-indigo-400 hover:text-indigo-300 border border-indigo-500/20 hover:border-indigo-500/50 bg-indigo-500/5 transition-all"
                 >
                   View Full Detail &rarr;
                 </button>

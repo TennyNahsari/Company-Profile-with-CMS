@@ -67,8 +67,17 @@ export default function Footer() {
               )}
               {footerSettings.contact_phone && (
                 <div className="flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                  <span>{footerSettings.contact_phone}</span>
+                  <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <a 
+                    href={`https://wa.me/${footerSettings.contact_phone.replace(/[^\d]/g, '').replace(/^0/, '62')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5"
+                    title="Chat via WhatsApp"
+                  >
+                    <span>{footerSettings.contact_phone}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">WhatsApp</span>
+                  </a>
                 </div>
               )}
             </div>

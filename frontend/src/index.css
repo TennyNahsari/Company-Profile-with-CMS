@@ -78,8 +78,8 @@ body {
 
 /* Calibrated Subpage & Section Spacing Clearance Rules */
 .subpage-top-clearance {
-  padding-top: 96px !important;
-  margin-top: 0px !important;
+  margin-top: 0 !important;
+  padding-top: 130px !important;
 }
 
 .service-detail-hero-gap {
@@ -132,7 +132,7 @@ body {
 
 @media (max-width: 768px) {
   .subpage-top-clearance {
-    padding-top: 80px !important;
+    padding-top: 100px !important;
   }
 
   .about-core-values-gap {
@@ -342,4 +342,516 @@ h6 {
   .section-padding {
     padding: 36px 0 !important;
   }
+}
+
+/* ========================================================
+   Homepage Services Section - Spacious Layout Fix
+   ======================================================== */
+.services-section-container {
+  padding-top: 80px !important;
+  padding-bottom: 95px !important;
+}
+
+.services-header-box {
+  margin-bottom: 4.5rem !important; /* 72px gap between header and cards */
+}
+
+.services-header-title {
+  margin-bottom: 1.25rem !important;
+}
+
+.services-header-subtitle {
+  max-width: 680px !important;
+  line-height: 1.75 !important;
+}
+
+.services-grid-layout {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 2rem !important; /* 32px gap on mobile */
+  width: 100% !important;
+  margin-bottom: 3.5rem !important;
+}
+
+@media (min-width: 640px) {
+  .services-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2.25rem !important; /* 36px gap on tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* 2 columns on 1024px gives generous card width */
+    gap: 2.5rem !important; /* 40px gap */
+  }
+}
+
+@media (min-width: 1280px) {
+  .services-grid-layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1.75rem !important; /* 28px gap on large screen */
+  }
+}
+
+.service-card-item {
+  padding: 2.25rem 1.85rem !important; /* Generous internal padding */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  border-radius: 20px !important;
+  min-height: 100% !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.service-card-badge {
+  margin-bottom: 1.25rem !important;
+}
+
+.service-card-icon-wrapper {
+  margin-bottom: 1.5rem !important;
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  border-radius: 1rem !important;
+}
+
+.service-card-title {
+  margin-bottom: 1rem !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.service-card-summary {
+  margin-bottom: 1.5rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  color: #cbd5e1 !important;
+}
+
+.service-card-features-list {
+  margin-bottom: 1.75rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.service-card-feature-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.625rem !important;
+  font-size: 0.8125rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+}
+
+.service-card-button {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 12px !important;
+  font-size: 0.8125rem !important;
+  margin-top: auto !important;
+}
+
+.services-cta-wrapper {
+  margin-top: 1.5rem !important;
+}
+
+/* ========================================================
+   Category Pages - Spacious Layout & Banner Fix
+   ======================================================== */
+.category-page-container {
+  padding-bottom: 110px !important;
+}
+
+.category-back-btn-box {
+  margin-bottom: 2.5rem !important; /* 40px gap below back button */
+}
+
+.category-header-banner {
+  padding: 3.5rem 2.5rem !important; /* Generous internal padding */
+  margin-bottom: 3.5rem !important; /* 56px gap below header banner */
+  border-radius: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .category-header-banner {
+    padding: 2.25rem 1.5rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+}
+
+.category-banner-badge {
+  margin-bottom: 1.25rem !important;
+}
+
+.category-banner-title {
+  margin-bottom: 1.25rem !important;
+  font-size: 2.5rem !important;
+  line-height: 1.25 !important;
+}
+
+@media (min-width: 768px) {
+  .category-banner-title {
+    font-size: 3.25rem !important;
+  }
+}
+
+.category-banner-subtitle {
+  max-width: 720px !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.75 !important;
+  font-size: 1rem !important;
+}
+
+.category-banner-count {
+  margin-top: 1rem !important;
+  padding: 0.5rem 1.25rem !important;
+  font-size: 0.8125rem !important;
+}
+
+.category-grid-layout {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 2rem !important;
+  width: 100% !important;
+}
+
+@media (min-width: 640px) {
+  .category-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2.25rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .category-grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 2.5rem !important; /* 40px gap between cards */
+  }
+}
+
+.category-card-item {
+  padding: 2.25rem 1.85rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  border-radius: 20px !important;
+  min-height: 100% !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ========================================================
+   Product/Service Detail Page - Spacious Layout Fix
+   ======================================================== */
+.detail-back-btn-box {
+  margin-bottom: 2.5rem !important; /* 40px gap below back button */
+}
+
+.service-detail-hero-banner {
+  padding: 3.5rem 2.75rem !important; /* Generous internal padding */
+  margin-bottom: 3.5rem !important; /* 56px gap below hero banner */
+  border-radius: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .service-detail-hero-banner {
+    padding: 2.25rem 1.5rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+}
+
+.service-detail-hero-header {
+  gap: 1.5rem !important;
+  margin-bottom: 1.75rem !important;
+}
+
+.service-detail-hero-title {
+  font-size: 2.75rem !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  margin-top: 0.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .service-detail-hero-title {
+    font-size: 2rem !important;
+  }
+}
+
+.service-detail-hero-summary {
+  margin-bottom: 2.25rem !important;
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  max-width: 780px !important;
+  color: #cbd5e1 !important;
+}
+
+.service-detail-hero-cta {
+  padding-top: 1.75rem !important;
+  margin-top: 2rem !important;
+  gap: 1.5rem !important;
+}
+
+.service-detail-section-grid {
+  margin-top: 3.5rem !important;
+  margin-bottom: 3.5rem !important;
+  gap: 2.25rem !important; /* 36px gap between Deliverables & Partner cards */
+}
+
+.service-detail-card {
+  padding: 2.5rem 2.25rem !important;
+  border-radius: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .service-detail-card {
+    padding: 1.75rem 1.5rem !important;
+  }
+}
+
+.service-detail-card-title {
+  margin-bottom: 1.75rem !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+}
+
+.service-detail-features-grid {
+  gap: 1.25rem !important; /* 20px gap between chips */
+}
+
+.service-detail-feature-chip {
+  padding: 1.125rem 1.25rem !important; /* Spacious internal padding */
+  border-radius: 16px !important;
+  gap: 0.875rem !important;
+}
+
+.service-detail-prose-box {
+  padding: 3.5rem 2.75rem !important;
+  margin-top: 3.5rem !important;
+  margin-bottom: 3.5rem !important;
+  border-radius: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .service-detail-prose-box {
+    padding: 2rem 1.5rem !important;
+  }
+}
+
+/* ========================================================
+   Homepage Thought Leadership (Blog) Section - Spacious Layout
+   ======================================================== */
+.blog-section-container {
+  padding-top: 85px !important;
+  padding-bottom: 95px !important;
+}
+
+.blog-header-box {
+  margin-bottom: 4.5rem !important; /* 72px gap between header and blog grid */
+}
+
+.blog-header-title {
+  margin-bottom: 1.25rem !important;
+}
+
+.blog-header-subtitle {
+  max-width: 680px !important;
+  line-height: 1.75 !important;
+}
+
+.blog-grid-layout {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 2rem !important;
+  width: 100% !important;
+  margin-bottom: 3.5rem !important;
+}
+
+@media (min-width: 640px) {
+  .blog-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2.25rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 2.5rem !important; /* 40px gap between blog cards */
+  }
+}
+
+.blog-card-item {
+  border-radius: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 100% !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.blog-card-image-box {
+  height: 230px !important;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+}
+
+.blog-card-content {
+  padding: 2.25rem 1.85rem !important; /* Spacious internal padding */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex: 1 !important;
+}
+
+.blog-card-date {
+  margin-bottom: 0.875rem !important;
+  font-size: 0.8125rem !important;
+}
+
+.blog-card-title {
+  margin-bottom: 1rem !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.blog-card-excerpt {
+  margin-bottom: 1.75rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  color: #cbd5e1 !important;
+}
+
+.blog-card-footer {
+  padding-top: 1.25rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  margin-top: auto !important;
+}
+
+.blog-cta-wrapper {
+  margin-top: 1.5rem !important;
+}
+
+/* ========================================================
+   CMS Admin Panel - Spacious Layout & Sidebar Fix
+   ======================================================== */
+.cms-sidebar {
+  width: 280px !important;
+  padding: 2rem 1.5rem !important;
+}
+
+.cms-nav-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important; /* 8px gap between nav buttons */
+}
+
+.cms-nav-item {
+  padding: 0.875rem 1.125rem !important; /* Spacious nav button padding */
+  border-radius: 14px !important;
+  font-size: 0.8125rem !important;
+}
+
+.cms-main-content {
+  padding: 2.75rem 3rem !important;
+}
+
+@media (max-width: 768px) {
+  .cms-main-content {
+    padding: 1.5rem 1.25rem !important;
+  }
+}
+
+.cms-dashboard-header {
+  margin-bottom: 2.5rem !important;
+}
+
+.cms-dashboard-title {
+  margin-bottom: 0.625rem !important;
+  font-size: 2.25rem !important;
+}
+
+.cms-metrics-grid {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 1.5rem !important;
+  margin-bottom: 2.75rem !important;
+}
+
+@media (min-width: 640px) {
+  .cms-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cms-metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.75rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .cms-metrics-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+  }
+}
+
+.cms-stat-card {
+  padding: 1.625rem 1.5rem !important; /* Generous stat card padding */
+  border-radius: 20px !important;
+  min-height: 125px !important;
+}
+
+.cms-quick-grid {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 2rem !important;
+  margin-bottom: 2.75rem !important;
+}
+
+@media (min-width: 768px) {
+  .cms-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 2rem !important;
+  }
+}
+
+.cms-quick-card {
+  padding: 2.25rem 1.85rem !important;
+  border-radius: 20px !important;
+}
+
+.cms-health-card {
+  padding: 2rem 2.25rem !important;
+  border-radius: 20px !important;
+  margin-top: 2rem !important;
+}
+
+/* ========================================================
+   WhatsApp Floating Widget - Premium Aesthetics
+   ======================================================== */
+.whatsapp-widget-btn {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+  box-shadow: 0 12px 32px -4px rgba(37, 211, 102, 0.5), 0 0 20px rgba(37, 211, 102, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.whatsapp-widget-btn:hover {
+  transform: translateY(-5px) scale(1.04) !important;
+  box-shadow: 0 18px 40px -4px rgba(37, 211, 102, 0.65), 0 0 30px rgba(37, 211, 102, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.whatsapp-tooltip-box {
+  background: rgba(11, 25, 46, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(37, 211, 102, 0.3) !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(37, 211, 102, 0.15) !important;
 }

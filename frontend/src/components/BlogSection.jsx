@@ -30,30 +30,30 @@ export default function BlogSection() {
   const displayedPosts = posts.slice(0, 3);
 
   return (
-    <section id="blog" className="w-full py-12 md:py-16 relative flex flex-col items-center justify-center">
+    <section id="blog" className="w-full relative flex flex-col items-center justify-center blog-section-container">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
 
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 flex flex-col items-center justify-center">
+        <div className="text-center mx-auto blog-header-box flex flex-col items-center justify-center">
           <div className="badge-glow mb-4 mx-auto">Thought Leadership</div>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4 text-center">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white text-center blog-header-title">
             Insights & <span className="gradient-text">Market Trends</span>
           </h2>
-          <p className="text-slate-400 text-base md:text-lg text-center">
+          <p className="text-slate-400 text-base md:text-lg text-center blog-header-subtitle">
             Expert perspectives on design systems, web performance, technical SEO, and modern growth architecture.
           </p>
         </div>
 
         {/* Blog Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-10">
+        <div className="blog-grid-layout">
           {displayedPosts.map((post) => (
             <div 
               key={post.id || post.slug}
               onClick={() => handlePostClick(post.slug)}
-              className="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col justify-between"
+              className="glass-card blog-card-item group cursor-pointer overflow-hidden"
             >
               {/* Image Banner */}
-              <div className="relative h-52 overflow-hidden">
+              <div className="relative blog-card-image-box overflow-hidden">
                 <img 
                   src={post.featured_image} 
                   alt={post.title} 
@@ -66,21 +66,21 @@ export default function BlogSection() {
               </div>
 
               {/* Content Area */}
-              <div className="p-6 flex-1 flex flex-col justify-between">
+              <div className="blog-card-content">
                 <div>
-                  <div className="flex items-center gap-2 text-[11px] text-slate-400 mb-2">
-                    <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                  <div className="flex items-center gap-2 text-slate-400 blog-card-date">
+                    <Calendar className="w-4 h-4 text-indigo-400" />
                     <span>{post.created_at ? new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '2026'}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-white group-hover:text-indigo-400 transition-colors blog-card-title">
                     {post.title}
                   </h3>
-                  <p className="text-xs text-slate-300 line-clamp-3 mb-6">
+                  <p className="line-clamp-3 blog-card-excerpt">
                     {post.excerpt}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                <div className="flex items-center justify-between blog-card-footer">
                   <span className="text-xs font-semibold text-indigo-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
                     Read Article &rarr;
                   </span>
@@ -91,10 +91,10 @@ export default function BlogSection() {
         </div>
 
         {/* Option B: Explore All Insights CTA */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center blog-cta-wrapper">
           <button 
             onClick={handleExploreAllBlog}
-            className="btn-secondary py-3 px-8 text-xs font-bold flex items-center gap-2 group"
+            className="btn-secondary py-3.5 px-8 text-xs font-bold flex items-center gap-2 group"
           >
             <span>Explore All Insights & Articles ({posts.length})</span>
             <ArrowRight className="w-4 h-4 text-indigo-400 group-hover:translate-x-1 transition-transform" />

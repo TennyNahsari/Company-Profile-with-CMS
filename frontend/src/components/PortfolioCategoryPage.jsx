@@ -49,11 +49,11 @@ export default function PortfolioCategoryPage({ categorySlug, onBack }) {
   }
 
   return (
-    <article className="subpage-top-clearance min-h-screen pb-28 w-full flex flex-col items-center">
+    <article className="subpage-top-clearance category-page-container min-h-screen w-full flex flex-col items-center">
       <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="category-back-btn-box">
           <button 
             onClick={onBack}
             className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all shadow-lg"
@@ -64,23 +64,23 @@ export default function PortfolioCategoryPage({ categorySlug, onBack }) {
         </div>
 
         {/* Category Header Banner */}
-        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-indigo-500/30 shadow-2xl mb-12 w-full text-center flex flex-col items-center relative overflow-hidden">
+        <div className="glass-panel category-header-banner border border-indigo-500/30 shadow-2xl w-full text-center flex flex-col items-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
-          <div className="badge-glow mb-3 mx-auto">Portfolio Category</div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 text-center">
+          <div className="badge-glow category-banner-badge mx-auto">Portfolio Category</div>
+          <h1 className="font-extrabold text-white text-center category-banner-title">
             {category?.name || 'Case Studies'}
           </h1>
-          <p className="text-slate-300 text-sm md:text-base max-w-2xl text-center leading-relaxed">
+          <p className="text-slate-300 text-center category-banner-subtitle">
             {category?.description || `Explore our proven B2B case studies and client transformations in ${category?.name || ''}.`}
           </p>
-          <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-4 py-1.5 rounded-full border border-indigo-500/20">
+          <div className="category-banner-count inline-flex items-center gap-2 font-semibold text-indigo-400 bg-indigo-500/10 rounded-full border border-indigo-500/20">
             <Briefcase className="w-3.5 h-3.5" />
             <span>{projects.length} Proven Case Studies Available</span>
           </div>
         </div>
 
         {/* Portfolio Grid for this Category */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <div className="category-grid-layout">
           {projects.map((project) => {
             const outcomes = typeof project.outcomes === 'string' ? JSON.parse(project.outcomes) : (project.outcomes || {});
 

@@ -19,6 +19,7 @@ import AllPortfolioPage from './components/AllPortfolioPage';
 
 import BlogDetailPage from './components/BlogDetailPage';
 import AllBlogPage from './components/AllBlogPage';
+import WhatsAppWidget from './components/WhatsAppWidget';
 
 import AdminLogin from './admin/AdminLogin';
 import AdminLayout from './admin/AdminLayout';
@@ -153,6 +154,7 @@ export default function App() {
           </main>
 
           <Footer />
+          <WhatsAppWidget />
         </>
       )}
 

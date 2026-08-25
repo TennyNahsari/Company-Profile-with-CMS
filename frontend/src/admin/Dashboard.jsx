@@ -44,19 +44,19 @@ export default function Dashboard({ onNavigate }) {
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div>
       {/* Title */}
-      <div>
-        <h1 className="text-3xl font-extrabold text-white">System Dashboard</h1>
-        <p className="text-xs text-slate-400 mt-1">Overview of Portfolio, Services, Categories, CMS Content & B2B Leads</p>
+      <div className="cms-dashboard-header">
+        <h1 className="font-extrabold text-white cms-dashboard-title">System Dashboard</h1>
+        <p className="text-xs text-slate-400">Overview of Portfolio, Services, Categories, CMS Content & B2B Leads</p>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5">
+      <div className="cms-metrics-grid">
         
         <div 
           onClick={() => onNavigate('portfolio')}
-          className="glass-panel p-5 rounded-2xl border border-indigo-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-indigo-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Portfolio</span>
@@ -70,7 +70,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('services')}
-          className="glass-panel p-5 rounded-2xl border border-purple-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-purple-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Services</span>
@@ -84,7 +84,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('categories')}
-          className="glass-panel p-5 rounded-2xl border border-emerald-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-emerald-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Categories</span>
@@ -98,7 +98,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('inquiries')}
-          className="glass-panel p-5 rounded-2xl border border-rose-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-rose-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">B2B Leads</span>
@@ -112,7 +112,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('posts')}
-          className="glass-panel p-5 rounded-2xl border border-amber-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-amber-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Articles</span>
@@ -126,7 +126,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('media')}
-          className="glass-panel p-5 rounded-2xl border border-sky-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
+          className="glass-panel cms-stat-card border border-sky-500/30 flex flex-col justify-between cursor-pointer hover:bg-white/5 transition-all"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Media</span>
@@ -141,11 +141,11 @@ export default function Dashboard({ onNavigate }) {
       </div>
 
       {/* Quick Action Tiles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="cms-quick-grid">
         
         <div 
           onClick={() => onNavigate('portfolio')}
-          className="glass-card p-6 rounded-2xl cursor-pointer group border border-white/5 hover:border-indigo-500/50"
+          className="glass-card cms-quick-card cursor-pointer group border border-white/5 hover:border-indigo-500/50"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
@@ -159,7 +159,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('services')}
-          className="glass-card p-6 rounded-2xl cursor-pointer group border border-white/5 hover:border-purple-500/50"
+          className="glass-card cms-quick-card cursor-pointer group border border-white/5 hover:border-purple-500/50"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
@@ -173,7 +173,7 @@ export default function Dashboard({ onNavigate }) {
 
         <div 
           onClick={() => onNavigate('categories')}
-          className="glass-card p-6 rounded-2xl cursor-pointer group border border-white/5 hover:border-emerald-500/50"
+          className="glass-card cms-quick-card cursor-pointer group border border-white/5 hover:border-emerald-500/50"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
@@ -188,7 +188,7 @@ export default function Dashboard({ onNavigate }) {
       </div>
 
       {/* Infrastructure & CPanel Status Card */}
-      <div className="glass-panel p-6 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="glass-panel cms-health-card border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
             <Server className="w-6 h-6" />
@@ -198,12 +198,12 @@ export default function Dashboard({ onNavigate }) {
               <span>CPanel Hosting Engine</span>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold">Healthy</span>
             </h4>
-            <p className="text-xs text-slate-400">Express.js API Node process running on port 5000 | PostgreSQL Pool Active</p>
+            <p className="text-xs text-slate-400 mt-1">Express.js API Node process running on port 5000 | PostgreSQL Pool Active</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 text-xs text-slate-300">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5">
+          <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/5 border border-white/5">
             <Database className="w-4 h-4 text-indigo-400" />
             <span>PostgreSQL DB Schema v1.0</span>
           </div>

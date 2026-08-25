@@ -65,7 +65,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
 
       {/* Desktop Sidebar & Mobile Sliding Drawer Overlay */}
       <aside className={`
-        fixed md:static inset-0 z-50 bg-[#0b192e] border-r border-white/10 flex flex-col justify-between p-6 shrink-0 transition-transform duration-300 w-64
+        fixed md:static inset-0 z-50 bg-[#0b192e] border-r border-white/10 flex flex-col justify-between shrink-0 transition-transform duration-300 cms-sidebar
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <div className="overflow-y-auto">
@@ -87,7 +87,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
           </div>
 
           {/* Navigation Menu */}
-          <nav className="space-y-1.5">
+          <nav className="cms-nav-list">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -95,7 +95,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+                  className={`w-full flex items-center justify-between cms-nav-item font-semibold transition-all ${
                     isActive 
                       ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' 
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -113,7 +113,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
         </div>
 
         {/* User Info & Actions */}
-        <div className="pt-6 border-t border-white/10 space-y-3 shrink-0">
+        <div className="pt-6 border-t border-white/10 space-y-3 shrink-0 mt-6">
           <div className="flex items-center gap-3 px-2">
             <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 text-xs font-bold">
               {user?.username?.[0]?.toUpperCase() || 'A'}
@@ -127,7 +127,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
           <div className="grid grid-cols-2 gap-2 pt-2">
             <button
               onClick={onCloseAdmin}
-              className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold"
               title="Return to Public Website"
             >
               <Globe className="w-3.5 h-3.5" />
@@ -136,7 +136,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
 
             <button
               onClick={onLogout}
-              className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold"
               title="Log out of CMS"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -155,7 +155,7 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
       )}
 
       {/* Main View Area */}
-      <main className="flex-1 overflow-y-auto bg-[#081425] p-4 md:p-8 w-full">
+      <main className="flex-1 overflow-y-auto bg-[#081425] cms-main-content w-full">
         {activeTab === 'dashboard' && <Dashboard onNavigate={(tab) => handleTabClick(tab)} />}
         {activeTab === 'menus' && <NavigationManager />}
         {activeTab === 'sliders' && <SliderManager />}

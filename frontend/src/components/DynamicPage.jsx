@@ -29,16 +29,16 @@ export default function DynamicPage({ slug, onBack }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-36 pb-20 flex flex-col items-center justify-center text-center">
+      <div className="subpage-top-clearance min-h-screen pb-20 flex flex-col items-center justify-center text-center">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-xs text-slate-400">Loading dynamic landing page...</p>
+        <p className="text-xs text-slate-400">Loading dynamic page...</p>
       </div>
     );
   }
 
   if (error || !pageData) {
     return (
-      <div className="min-h-screen pt-36 pb-20 flex flex-col items-center justify-center text-center">
+      <div className="subpage-top-clearance min-h-screen pb-20 flex flex-col items-center justify-center text-center">
         <div className="glass-panel p-8 rounded-3xl max-w-md mx-auto text-center border border-rose-500/30">
           <FileText className="w-12 h-12 text-rose-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Page Not Found</h2>
@@ -54,32 +54,33 @@ export default function DynamicPage({ slug, onBack }) {
 
   return (
     <article className="subpage-top-clearance min-h-screen pb-28 w-full flex flex-col items-center">
-      <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-5xl">
         
         {/* Back navigation */}
-        <div className="mb-8">
+        <div className="mb-6 flex items-center justify-start w-full">
           <button 
             onClick={onBack}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all shadow-lg"
           >
             <ArrowLeft className="w-4 h-4 text-indigo-400" />
             <span>Back to Home</span>
           </button>
         </div>
 
-        {/* Page Title & Header */}
-        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-indigo-500/20 shadow-2xl mb-12 w-full text-center flex flex-col items-center">
+        {/* Page Title & Header Banner */}
+        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-indigo-500/30 shadow-2xl mb-10 w-full text-center flex flex-col items-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
           <div className="badge-glow mb-4 mx-auto">Custom Dynamic Page</div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 text-center">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 text-center leading-tight">
             {pageData.title}
           </h1>
-          <span className="text-xs font-mono text-indigo-400">/{pageData.slug}</span>
+          <span className="text-xs font-mono text-indigo-400 bg-indigo-500/15 px-3 py-1 rounded-full border border-indigo-500/30">/{pageData.slug}</span>
         </div>
 
         {/* Dynamic Custom HTML & CSS Render Area */}
         <div 
-          className="w-full glass-panel p-8 md:p-12 rounded-3xl border border-white/10 prose prose-invert max-w-none text-slate-200"
-          dangerouslySetInnerHTML={{ __html: pageData.custom_html_css || '<p className="text-slate-400 italic">No custom content added yet.</p>' }}
+          className="w-full glass-panel p-8 md:p-12 rounded-3xl border border-white/10 prose prose-invert max-w-none text-slate-300 leading-relaxed shadow-xl"
+          dangerouslySetInnerHTML={{ __html: pageData.custom_html_css || '<p class="text-slate-400 italic">No custom content added yet.</p>' }}
         />
 
       </div>
