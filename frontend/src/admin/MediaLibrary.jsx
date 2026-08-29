@@ -13,7 +13,7 @@ export default function MediaLibrary() {
 
   const loadMedia = async () => {
     const data = await apiService.getMedia();
-    setMediaItems(data);
+    setMediaItems(Array.isArray(data) ? data : []);
   };
 
   const handleFileUpload = async (e) => {
@@ -52,7 +52,7 @@ export default function MediaLibrary() {
 
       {/* Grid of Media Assets */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {mediaItems.map((item) => (
+        {(mediaItems || []).map((item) => (
           <div key={item.id} className="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between group">
             <div className="h-40 rounded-lg overflow-hidden mb-3 bg-slate-900 flex items-center justify-center relative">
               <img 

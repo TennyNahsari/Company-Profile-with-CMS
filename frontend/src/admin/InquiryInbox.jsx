@@ -12,8 +12,9 @@ export default function InquiryInbox() {
 
   const loadInquiries = async () => {
     const data = await apiService.getInquiries();
-    setInquiries(data);
-    if (data.length > 0) setSelectedInquiry(data[0]);
+    const list = Array.isArray(data) ? data : [];
+    setInquiries(list);
+    if (list.length > 0) setSelectedInquiry(list[0]);
   };
 
   return (
@@ -26,10 +27,10 @@ export default function InquiryInbox() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Inbox List */}
         <div className="lg:col-span-5 glass-panel p-4 sm:p-6 rounded-2xl border border-white/10 flex flex-col gap-3">
-          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2">Received Leads ({inquiries.length})</h3>
+          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2">Received Leads ({inquiries?.length || 0})</h3>
 
           <div className="space-y-2">
-            {inquiries.map((inq) => (
+            {(inquiries || []).map((inq) => (
               <div
                 key={inq.id}
                 onClick={() => setSelectedInquiry(inq)}

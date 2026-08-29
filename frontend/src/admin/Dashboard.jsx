@@ -30,13 +30,13 @@ export default function Dashboard({ onNavigate }) {
         ]);
 
         setStats({
-          projectsCount: projects.length,
-          servicesCount: services.length,
-          categoriesCount: pCategories.length,
-          postsCount: posts.length,
-          mediaCount: media.length,
-          inquiriesCount: inquiries.length,
-          pagesCount: pages.length
+          projectsCount: Array.isArray(projects) ? projects.length : 0,
+          servicesCount: Array.isArray(services) ? services.length : 0,
+          categoriesCount: Array.isArray(pCategories) ? pCategories.length : 0,
+          postsCount: Array.isArray(posts) ? posts.length : 0,
+          mediaCount: Array.isArray(media) ? media.length : 0,
+          inquiriesCount: Array.isArray(inquiries) ? inquiries.length : 0,
+          pagesCount: Array.isArray(pages) ? pages.length : 0
         });
       } catch (e) {}
     }

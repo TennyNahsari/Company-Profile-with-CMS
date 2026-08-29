@@ -10,10 +10,12 @@ let memoryFooter = {
   contact_email: 'hello@digiagency.com',
   contact_phone: '+1 (555) 234-5678',
   copyright_text: '© 2026 DigiAgency Aetheric. All rights reserved. Powered by React, Express & PostgreSQL.',
-  social_linkedin: 'https://linkedin.com',
+  social_instagram: 'https://instagram.com',
   social_twitter: 'https://twitter.com',
-  social_github: 'https://github.com',
-  social_dribbble: 'https://dribbble.com'
+  social_threads: 'https://threads.net',
+  social_facebook: 'https://facebook.com',
+  social_linkedin: 'https://linkedin.com',
+  social_youtube: 'https://youtube.com'
 };
 
 // GET /api/settings/footer (Public)
@@ -21,7 +23,8 @@ router.get('/footer', async (req, res) => {
   try {
     const result = await db.query("SELECT value FROM site_settings WHERE key = 'footer'");
     if (result.rows.length > 0) {
-      return res.json({ success: true, data: result.rows[0].value });
+      const merged = { ...memoryFooter, ...result.rows[0].value };
+      return res.json({ success: true, data: merged });
     }
     return res.json({ success: true, data: memoryFooter });
   } catch (err) {
@@ -32,14 +35,16 @@ router.get('/footer', async (req, res) => {
 // PUT /api/settings/footer (Admin)
 router.put('/footer', verifyToken, async (req, res) => {
   const footerData = req.body;
+  const updatedFooter = { ...memoryFooter, ...footerData };
   try {
     const result = await db.query(
       "INSERT INTO site_settings (key, value, updated_at) VALUES ('footer', $1, NOW()) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW() RETURNING value",
-      [JSON.stringify(footerData)]
+      [JSON.stringify(updatedFooter)]
     );
-    return res.json({ success: true, data: result.rows[0].value });
+    memoryFooter = { ...memoryFooter, ...result.rows[0].value };
+    return res.json({ success: true, data: memoryFooter });
   } catch (err) {
-    memoryFooter = { ...memoryFooter, ...footerData };
+    memoryFooter = updatedFooter;
     return res.json({ success: true, data: memoryFooter });
   }
 });
