@@ -1,6 +1,6 @@
 -- ===================================================
--- DigiAgency PostgreSQL Complete Database Schema & Seed
--- File: schema.sql
+-- DigiAgency PostgreSQL Complete Database Init Script
+-- File: init.sql
 -- Description: Drops old tables (if any), creates all required tables,
 --              indexes, sequences, and populates initial seed data
 --              including Admin user for login.
