@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Upload, Copy, Check, Trash2 } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function MediaLibrary() {
   const [mediaItems, setMediaItems] = useState([]);
   const [copiedId, setCopiedId] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     loadMedia();
@@ -35,6 +38,16 @@ export default function MediaLibrary() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  // Pagination logic
+  const totalPages = Math.ceil((mediaItems.length || 0) / itemsPerPage);
+  const paginatedItems = mediaItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [mediaItems.length, totalPages, currentPage]);
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -52,7 +65,7 @@ export default function MediaLibrary() {
 
       {/* Grid of Media Assets */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {(mediaItems || []).map((item) => (
+        {(paginatedItems || []).map((item) => (
           <div key={item.id} className="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between group">
             <div className="h-40 rounded-lg overflow-hidden mb-3 bg-slate-900 flex items-center justify-center relative">
               <img 
@@ -94,6 +107,14 @@ export default function MediaLibrary() {
           </div>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

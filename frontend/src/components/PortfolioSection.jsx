@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, Layers, TrendingUp, Tag, ArrowRight } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from './Pagination';
 
 export default function PortfolioSection() {
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState([{ name: 'ALL', slug: 'all' }]);
   const [filter, setFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     async function loadPortfolioData() {
@@ -29,8 +32,13 @@ export default function PortfolioSection() {
         (p.category_slug && p.category_slug === filter.toLowerCase())
       );
 
-  // Option B: Limit homepage display to top 6 projects
-  const displayedProjects = filteredProjects.slice(0, 6);
+  // Reset page when category filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
+
+  const totalPages = Math.ceil((filteredProjects.length || 0) / itemsPerPage);
+  const paginatedProjects = filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleProjectClick = (slug) => {
     const targetUrl = `/portfolio/${slug}`;
@@ -86,9 +94,9 @@ export default function PortfolioSection() {
           ))}
         </div>
 
-        {/* Portfolio Grid (Showcase 6 Featured) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-14">
-          {displayedProjects.map((project) => {
+        {/* Portfolio Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8">
+          {paginatedProjects.map((project) => {
             const outcomes = typeof project.outcomes === 'string' ? JSON.parse(project.outcomes) : (project.outcomes || {});
             const catName = project.category_name || project.category;
             const catSlug = project.category_slug || (catName ? catName.toLowerCase().replace(/[^a-z0-9]/g, '-') : null);
@@ -150,7 +158,17 @@ export default function PortfolioSection() {
           })}
         </div>
 
-        {/* Option B: Explore All Case Studies CTA */}
+        {totalPages > 1 && (
+          <div className="mb-8">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+
+        {/* Explore All Case Studies CTA */}
         <div className="flex items-center justify-center">
           <button 
             onClick={handleExploreAllPortfolio}

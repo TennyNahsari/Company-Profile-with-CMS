@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import { ArrowLeft, Layout, Code, TrendingUp, Sparkles, CheckCircle2, ArrowUpRight, Tag, Layers, Search } from 'lucide-react';
+import Pagination from './Pagination';
 
 const iconMap = {
   Layout: Layout,
@@ -15,6 +16,8 @@ export default function AllServicesPage({ onBack }) {
   const [filter, setFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     async function loadAllServices() {
@@ -43,6 +46,14 @@ export default function AllServicesPage({ onBack }) {
       s.summary.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  // Reset to page 1 when filter or search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchQuery]);
+
+  const totalPages = Math.ceil((filteredServices.length || 0) / itemsPerPage);
+  const paginatedServices = filteredServices.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleServiceClick = (slug) => {
     const targetUrl = `/service/${slug}`;
@@ -126,8 +137,8 @@ export default function AllServicesPage({ onBack }) {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {filteredServices.map((service) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8">
+          {paginatedServices.map((service) => {
             const IconComponent = iconMap[service.icon_name] || Layout;
             const features = typeof service.features === 'string' ? JSON.parse(service.features) : (service.features || []);
             const hasCategory = Boolean(service.category_name);
@@ -186,6 +197,17 @@ export default function AllServicesPage({ onBack }) {
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+            }}
+          />
+        )}
 
       </div>
     </article>

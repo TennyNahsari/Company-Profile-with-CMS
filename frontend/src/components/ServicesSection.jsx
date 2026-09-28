@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Code, TrendingUp, Sparkles, CheckCircle2, ArrowUpRight, Tag, ArrowRight } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from './Pagination';
 
 const iconMap = {
   Layout: Layout,
@@ -11,6 +12,8 @@ const iconMap = {
 
 export default function ServicesSection() {
   const [services, setServices] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     async function loadServices() {
@@ -19,6 +22,9 @@ export default function ServicesSection() {
     }
     loadServices();
   }, []);
+
+  const totalPages = Math.ceil((services.length || 0) / itemsPerPage);
+  const paginatedServices = services.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleServiceClick = (slug) => {
     const targetUrl = `/service/${slug}`;
@@ -42,9 +48,6 @@ export default function ServicesSection() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Option B: Limit to top 4 featured services on Homepage
-  const displayedServices = services.slice(0, 4);
-
   return (
     <section id="services" className="w-full relative flex flex-col items-center justify-center services-section-container">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
@@ -60,9 +63,9 @@ export default function ServicesSection() {
           </p>
         </div>
 
-        {/* Services Grid (Showcase 4 Featured) */}
-        <div className="services-grid-layout">
-          {displayedServices.map((service) => {
+        {/* Services Grid */}
+        <div className="services-grid-layout mb-8">
+          {paginatedServices.map((service) => {
             const IconComponent = iconMap[service.icon_name] || Layout;
             const features = typeof service.features === 'string' ? JSON.parse(service.features) : (service.features || []);
             const hasCategory = Boolean(service.category_name);
@@ -126,7 +129,17 @@ export default function ServicesSection() {
           })}
         </div>
 
-        {/* Option B: Explore All Services CTA */}
+        {totalPages > 1 && (
+          <div className="mb-8">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+
+        {/* Explore All Services CTA */}
         <div className="flex items-center justify-center services-cta-wrapper">
           <button 
             onClick={handleExploreAllServices}

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FolderOpen, Plus, Trash2, Save, Image, CheckCircle2 } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function PostManager() {
   const [posts, setPosts] = useState([]);
   const [activePost, setActivePost] = useState(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     loadPosts();
@@ -14,7 +17,7 @@ export default function PostManager() {
 
   const loadPosts = async () => {
     const data = await apiService.getPosts();
-    setPosts(data);
+    setPosts(data || []);
   };
 
   const handleCreateNew = () => {
@@ -52,6 +55,16 @@ export default function PostManager() {
     loadPosts();
   };
 
+  // Pagination calculation
+  const totalPages = Math.ceil((posts.length || 0) / itemsPerPage);
+  const paginatedPosts = posts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [posts.length, totalPages, currentPage]);
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -67,35 +80,45 @@ export default function PostManager() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Posts List */}
-        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col gap-4">
-          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Published Articles ({posts.length})</h3>
-          
-          <div className="space-y-2">
-            {posts.map((p) => (
-              <div 
-                key={p.id}
-                onClick={() => setActivePost(p)}
-                className={`p-4 rounded-xl cursor-pointer border transition-all ${
-                  activePost?.id === p.id 
-                    ? 'bg-purple-600/20 border-purple-500 text-white' 
-                    : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-purple-400 uppercase">{p.category_name || 'Insights'}</span>
-                  {p.id && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }} 
-                      className="text-slate-500 hover:text-rose-400"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  )}
+        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col justify-between gap-4">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Published Articles ({posts.length})</h3>
+            
+            <div className="space-y-2">
+              {paginatedPosts.map((p) => (
+                <div 
+                  key={p.id}
+                  onClick={() => setActivePost(p)}
+                  className={`p-4 rounded-xl cursor-pointer border transition-all ${
+                    activePost?.id === p.id 
+                      ? 'bg-purple-600/20 border-purple-500 text-white' 
+                      : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-purple-400 uppercase">{p.category_name || 'Insights'}</span>
+                    {p.id && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }} 
+                        className="text-slate-500 hover:text-rose-400"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                  <h4 className="text-sm font-bold truncate mt-1">{p.title}</h4>
                 </div>
-                <h4 className="text-sm font-bold truncate mt-1">{p.title}</h4>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {totalPages > 1 && (
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
 
         {/* Editor Form */}

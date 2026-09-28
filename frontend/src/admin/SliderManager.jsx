@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sliders, Plus, Trash2, Save, Image, Link, CheckCircle2 } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function SliderManager() {
   const [sliders, setSliders] = useState([]);
@@ -13,6 +14,8 @@ export default function SliderManager() {
     cta_link: '#portfolio'
   });
   const [msg, setMsg] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     loadSliders();
@@ -20,8 +23,18 @@ export default function SliderManager() {
 
   const loadSliders = async () => {
     const data = await apiService.getSliders();
-    setSliders(data);
+    setSliders(data || []);
   };
+
+  // Pagination logic
+  const totalPages = Math.ceil((sliders.length || 0) / itemsPerPage);
+  const paginatedSliders = sliders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [sliders.length, totalPages, currentPage]);
 
   const handleAddSlide = async (e) => {
     e.preventDefault();
@@ -141,24 +154,36 @@ export default function SliderManager() {
       </div>
 
       {/* Slide List Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {sliders.map((slide) => (
-          <div key={slide.id} className="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
-            <div className="relative h-40 rounded-lg overflow-hidden mb-3">
-              <img src={slide.image_url} alt={slide.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-slate-950/60 p-3 flex flex-col justify-end">
-                <span className="text-[10px] font-bold text-indigo-400 uppercase">{slide.badge_text}</span>
-                <h4 className="text-sm font-bold text-white line-clamp-1">{slide.title}</h4>
+      <div className="space-y-4">
+        <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Slides ({sliders.length})</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {paginatedSliders.map((slide) => (
+            <div key={slide.id} className="glass-card p-4 rounded-xl border border-white/10 flex flex-col justify-between">
+              <div className="relative h-40 rounded-lg overflow-hidden mb-3">
+                <img src={slide.image_url} alt={slide.title} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-slate-950/60 p-3 flex flex-col justify-end">
+                  <span className="text-[10px] font-bold text-indigo-400 uppercase">{slide.badge_text}</span>
+                  <h4 className="text-sm font-bold text-white line-clamp-1">{slide.title}</h4>
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                <span className="text-xs text-slate-400">CTA: {slide.cta_text} ({slide.cta_link})</span>
+                <button onClick={() => handleDelete(slide.id)} className="text-rose-400 hover:text-rose-300 p-1">
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
-            <div className="flex items-center justify-between pt-2 border-t border-white/5">
-              <span className="text-xs text-slate-400">CTA: {slide.cta_text} ({slide.cta_link})</span>
-              <button onClick={() => handleDelete(slide.id)} className="text-rose-400 hover:text-rose-300 p-1">
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
     </div>
   );

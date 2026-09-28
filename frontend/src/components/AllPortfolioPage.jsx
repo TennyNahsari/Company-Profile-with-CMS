@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import { ArrowLeft, Briefcase, TrendingUp, Search, Tag } from 'lucide-react';
+import Pagination from './Pagination';
 
 export default function AllPortfolioPage({ onBack }) {
   const [projects, setProjects] = useState([]);
@@ -8,6 +9,8 @@ export default function AllPortfolioPage({ onBack }) {
   const [filter, setFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     async function loadAllPortfolio() {
@@ -38,6 +41,14 @@ export default function AllPortfolioPage({ onBack }) {
       p.summary.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  // Reset to page 1 when filter or search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchQuery]);
+
+  const totalPages = Math.ceil((filteredProjects.length || 0) / itemsPerPage);
+  const paginatedProjects = filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleProjectDetailClick = (slug) => {
     const targetUrl = `/portfolio/${slug}`;
@@ -121,8 +132,8 @@ export default function AllPortfolioPage({ onBack }) {
         </div>
 
         {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {filteredProjects.map((project) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8">
+          {paginatedProjects.map((project) => {
             const outcomes = typeof project.outcomes === 'string' ? JSON.parse(project.outcomes) : (project.outcomes || {});
             const catName = project.category_name || project.category;
             const catSlug = project.category_slug || (catName ? catName.toLowerCase().replace(/[^a-z0-9]/g, '-') : null);
@@ -179,6 +190,17 @@ export default function AllPortfolioPage({ onBack }) {
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+            }}
+          />
+        )}
 
       </div>
     </article>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Plus, Save, Trash2, CheckCircle2, AlertCircle, Image } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function PortfolioManager() {
   const [projects, setProjects] = useState([]);
@@ -9,6 +10,8 @@ export default function PortfolioManager() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     loadPortfolioData();
@@ -30,6 +33,16 @@ export default function PortfolioManager() {
       });
     }
   };
+
+  // Pagination calculation
+  const totalPages = Math.ceil((projects.length || 0) / itemsPerPage);
+  const paginatedProjects = projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [projects.length, totalPages, currentPage]);
 
   const handleCreateNew = () => {
     setActiveProject({
@@ -123,44 +136,54 @@ export default function PortfolioManager() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Case Studies List */}
-        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col gap-4">
-          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Projects ({projects.length})</h3>
-          
-          <div className="space-y-2">
-            {projects.map((p) => (
-              <div 
-                key={p.id || p.slug}
-                onClick={() => {
-                  setMsg('');
-                  setErrorMsg('');
-                  setActiveProject({
-                    ...p,
-                    outcomesStr: typeof p.outcomes === 'object' ? JSON.stringify(p.outcomes, null, 2) : (p.outcomes || '{}')
-                  });
-                }}
-                className={`p-4 rounded-xl cursor-pointer border transition-all flex items-center justify-between ${
-                  activeProject?.slug === p.slug 
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white' 
-                    : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-              >
-                <div>
-                  <h4 className="text-sm font-bold truncate">{p.title}</h4>
-                  <span className="text-[11px] text-indigo-400 font-mono mt-0.5 block">/portfolio/{p.slug}</span>
+        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col justify-between gap-4">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Projects ({projects.length})</h3>
+            
+            <div className="space-y-2">
+              {paginatedProjects.map((p) => (
+                <div 
+                  key={p.id || p.slug}
+                  onClick={() => {
+                    setMsg('');
+                    setErrorMsg('');
+                    setActiveProject({
+                      ...p,
+                      outcomesStr: typeof p.outcomes === 'object' ? JSON.stringify(p.outcomes, null, 2) : (p.outcomes || '{}')
+                    });
+                  }}
+                  className={`p-4 rounded-xl cursor-pointer border transition-all flex items-center justify-between ${
+                    activeProject?.slug === p.slug 
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white' 
+                      : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div>
+                    <h4 className="text-sm font-bold truncate">{p.title}</h4>
+                    <span className="text-[11px] text-indigo-400 font-mono mt-0.5 block">/portfolio/{p.slug}</span>
+                  </div>
+                  
+                  {p.id && (
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }} 
+                      className="text-slate-500 hover:text-rose-400 p-1"
+                      title="Delete Project"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
-                
-                {p.id && (
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }} 
-                    className="text-slate-500 hover:text-rose-400 p-1"
-                    title="Delete Project"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {totalPages > 1 && (
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
 
         {/* Right Editor Form */}

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import { ArrowLeft, Calendar, Search, Tag, ArrowRight } from 'lucide-react';
+import Pagination from './Pagination';
 
 export default function AllBlogPage({ onBack }) {
   const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     async function loadAllPosts() {
@@ -24,6 +27,14 @@ export default function AllBlogPage({ onBack }) {
       p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       p.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
+  // Reset to page 1 whenever search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil((filteredPosts.length || 0) / itemsPerPage);
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePostDetailClick = (slug) => {
     const targetUrl = `/blog/${slug}`;
@@ -81,8 +92,8 @@ export default function AllBlogPage({ onBack }) {
         </div>
 
         {/* Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {filteredPosts.map((post) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8">
+          {paginatedPosts.map((post) => (
             <div 
               key={post.id || post.slug}
               onClick={() => handlePostDetailClick(post.slug)}
@@ -123,6 +134,17 @@ export default function AllBlogPage({ onBack }) {
             </div>
           ))}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+            }}
+          />
+        )}
 
       </div>
     </article>

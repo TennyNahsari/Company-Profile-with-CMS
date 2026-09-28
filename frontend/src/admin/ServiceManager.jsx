@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layers, Plus, Save, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function ServiceManager() {
   const [services, setServices] = useState([]);
@@ -9,6 +10,8 @@ export default function ServiceManager() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     loadServicesData();
@@ -30,6 +33,16 @@ export default function ServiceManager() {
       });
     }
   };
+
+  // Pagination calculation
+  const totalPages = Math.ceil((services.length || 0) / itemsPerPage);
+  const paginatedServices = services.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [services.length, totalPages, currentPage]);
 
   const handleCreateNew = () => {
     setActiveService({
@@ -104,44 +117,54 @@ export default function ServiceManager() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Services List */}
-        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col gap-4">
-          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Services ({services.length})</h3>
-          
-          <div className="space-y-2">
-            {services.map((s) => (
-              <div 
-                key={s.id || s.slug}
-                onClick={() => {
-                  setMsg('');
-                  setErrorMsg('');
-                  setActiveService({
-                    ...s,
-                    features: typeof s.features === 'string' ? JSON.parse(s.features) : (s.features || [])
-                  });
-                }}
-                className={`p-4 rounded-xl cursor-pointer border transition-all flex items-center justify-between ${
-                  activeService?.slug === s.slug 
-                    ? 'bg-indigo-600/20 border-indigo-500 text-white' 
-                    : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
-                }`}
-              >
-                <div>
-                  <h4 className="text-sm font-bold truncate">{s.title}</h4>
-                  <span className="text-[11px] text-indigo-400 font-mono mt-0.5 block">/service/{s.slug}</span>
+        <div className="lg:col-span-4 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col justify-between gap-4">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Active Services ({services.length})</h3>
+            
+            <div className="space-y-2">
+              {paginatedServices.map((s) => (
+                <div 
+                  key={s.id || s.slug}
+                  onClick={() => {
+                    setMsg('');
+                    setErrorMsg('');
+                    setActiveService({
+                      ...s,
+                      features: typeof s.features === 'string' ? JSON.parse(s.features) : (s.features || [])
+                    });
+                  }}
+                  className={`p-4 rounded-xl cursor-pointer border transition-all flex items-center justify-between ${
+                    activeService?.slug === s.slug 
+                      ? 'bg-indigo-600/20 border-indigo-500 text-white' 
+                      : 'bg-white/5 border-white/5 text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  <div>
+                    <h4 className="text-sm font-bold truncate">{s.title}</h4>
+                    <span className="text-[11px] text-indigo-400 font-mono mt-0.5 block">/service/{s.slug}</span>
+                  </div>
+                  
+                  {s.id && (
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleDelete(s.id); }} 
+                      className="text-slate-500 hover:text-rose-400 p-1"
+                      title="Delete Service"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
-                
-                {s.id && (
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); handleDelete(s.id); }} 
-                    className="text-slate-500 hover:text-rose-400 p-1"
-                    title="Delete Service"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {totalPages > 1 && (
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
 
         {/* Right Service Editor Form */}

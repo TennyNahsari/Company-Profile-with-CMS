@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import { ArrowLeft, TrendingUp, Briefcase, Layers } from 'lucide-react';
+import Pagination from './Pagination';
 
 export default function PortfolioCategoryPage({ categorySlug, onBack }) {
   const [category, setCategory] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     async function loadCategoryPortfolio() {
@@ -31,6 +34,13 @@ export default function PortfolioCategoryPage({ categorySlug, onBack }) {
     }
     loadCategoryPortfolio();
   }, [categorySlug]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categorySlug]);
+
+  const totalPages = Math.ceil((projects.length || 0) / itemsPerPage);
+  const paginatedProjects = projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleProjectDetailClick = (slug) => {
     const targetUrl = `/portfolio/${slug}`;
@@ -80,8 +90,8 @@ export default function PortfolioCategoryPage({ categorySlug, onBack }) {
         </div>
 
         {/* Portfolio Grid for this Category */}
-        <div className="category-grid-layout">
-          {projects.map((project) => {
+        <div className="category-grid-layout mb-8">
+          {paginatedProjects.map((project) => {
             const outcomes = typeof project.outcomes === 'string' ? JSON.parse(project.outcomes) : (project.outcomes || {});
 
             return (
@@ -130,6 +140,17 @@ export default function PortfolioCategoryPage({ categorySlug, onBack }) {
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+            }}
+          />
+        )}
 
       </div>
     </article>

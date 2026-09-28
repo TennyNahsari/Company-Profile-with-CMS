@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tag, Plus, Trash2, CheckCircle2, AlertCircle, Layers, Briefcase } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from '../components/Pagination';
 
 export default function CategoryManager() {
   const [activeTab, setActiveTab] = useState('portfolio'); // 'portfolio' or 'services'
@@ -11,6 +12,8 @@ export default function CategoryManager() {
   const [msg, setMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     loadCategories();
@@ -24,6 +27,23 @@ export default function CategoryManager() {
     setPortfolioCats(pData || []);
     setServiceCats(sData || []);
   };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setMsg('');
+    setErrorMsg('');
+  };
+
+  const activeCats = activeTab === 'portfolio' ? portfolioCats : serviceCats;
+  const totalPages = Math.ceil((activeCats.length || 0) / itemsPerPage);
+  const paginatedCats = activeCats.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [activeCats.length, totalPages, currentPage]);
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
@@ -91,7 +111,7 @@ export default function CategoryManager() {
         {/* Tab Switcher */}
         <div className="flex items-center gap-2 glass-panel p-1 rounded-xl border border-white/10">
           <button
-            onClick={() => { setActiveTab('portfolio'); setMsg(''); setErrorMsg(''); }}
+            onClick={() => handleTabChange('portfolio')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
               activeTab === 'portfolio'
                 ? 'bg-indigo-600 text-white shadow-lg'
@@ -102,7 +122,7 @@ export default function CategoryManager() {
             <span>Portfolio Categories</span>
           </button>
           <button
-            onClick={() => { setActiveTab('services'); setMsg(''); setErrorMsg(''); }}
+            onClick={() => handleTabChange('services')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
               activeTab === 'services'
                 ? 'bg-purple-600 text-white shadow-lg'
@@ -169,28 +189,38 @@ export default function CategoryManager() {
         </div>
 
         {/* Categories List */}
-        <div className="lg:col-span-7 glass-panel p-6 rounded-2xl border border-white/10 space-y-3">
-          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">
-            Active {activeTab === 'portfolio' ? 'Portfolio' : 'Service'} Categories ({activeTab === 'portfolio' ? portfolioCats.length : serviceCats.length})
-          </h3>
+        <div className="lg:col-span-7 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">
+              Active {activeTab === 'portfolio' ? 'Portfolio' : 'Service'} Categories ({activeCats.length})
+            </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(activeTab === 'portfolio' ? portfolioCats : serviceCats).map((cat) => (
-              <div key={cat.id} className="p-4 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-bold text-white">{cat.name}</h4>
-                  <span className="text-xs text-indigo-400 font-mono">/{cat.slug}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {paginatedCats.map((cat) => (
+                <div key={cat.id} className="p-4 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-white">{cat.name}</h4>
+                    <span className="text-xs text-indigo-400 font-mono">/{cat.slug}</span>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteCategory(cat.id)} 
+                    className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
+                    title="Delete Category"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <button 
-                  onClick={() => handleDeleteCategory(cat.id)} 
-                  className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
-                  title="Delete Category"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
 
       </div>

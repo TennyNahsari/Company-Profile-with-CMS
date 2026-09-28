@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { apiService } from '../services/api';
+import Pagination from './Pagination';
 
 export default function BlogSection() {
   const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   useEffect(() => {
     async function loadPosts() {
@@ -12,6 +15,9 @@ export default function BlogSection() {
     }
     loadPosts();
   }, []);
+
+  const totalPages = Math.ceil((posts.length || 0) / itemsPerPage);
+  const paginatedPosts = posts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePostClick = (slug) => {
     const targetUrl = `/blog/${slug}`;
@@ -25,9 +31,6 @@ export default function BlogSection() {
     window.dispatchEvent(new Event('popstate'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  // Option B: Limit top 3 articles on Homepage
-  const displayedPosts = posts.slice(0, 3);
 
   return (
     <section id="blog" className="w-full relative flex flex-col items-center justify-center blog-section-container">
@@ -45,8 +48,8 @@ export default function BlogSection() {
         </div>
 
         {/* Blog Posts Grid */}
-        <div className="blog-grid-layout">
-          {displayedPosts.map((post) => (
+        <div className="blog-grid-layout mb-8">
+          {paginatedPosts.map((post) => (
             <div 
               key={post.id || post.slug}
               onClick={() => handlePostClick(post.slug)}
@@ -90,7 +93,17 @@ export default function BlogSection() {
           ))}
         </div>
 
-        {/* Option B: Explore All Insights CTA */}
+        {totalPages > 1 && (
+          <div className="mb-8">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+
+        {/* Explore All Insights CTA */}
         <div className="flex items-center justify-center blog-cta-wrapper">
           <button 
             onClick={handleExploreAllBlog}
