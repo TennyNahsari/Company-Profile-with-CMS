@@ -56,13 +56,16 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const range = getPaginationRange(currentPage, totalPages);
 
   return (
-    <nav className="flex items-center justify-center gap-1.5 sm:gap-2 my-6 select-none" aria-label="Pagination Navigation">
+    <nav 
+      className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 my-6 select-none w-full max-w-full px-2" 
+      aria-label="Pagination Navigation"
+    >
       {/* Previous Button */}
       <button
         type="button"
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+        className={`inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border shrink-0 ${
           currentPage === 1
             ? 'opacity-40 cursor-not-allowed bg-slate-900/40 border-white/5 text-slate-500'
             : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/50'
@@ -73,11 +76,11 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       </button>
 
       {/* Page Numbers */}
-      <div className="flex items-center gap-1 sm:gap-1.5">
+      <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5">
         {range.map((item, idx) => {
           if (item === '...') {
             return (
-              <span key={`dots-${idx}`} className="px-2 py-1 text-xs text-slate-500 font-mono">
+              <span key={`dots-${idx}`} className="px-1 sm:px-2 py-1 text-xs text-slate-500 font-mono select-none">
                 ...
               </span>
             );
@@ -89,9 +92,9 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
               key={`page-${item}`}
               type="button"
               onClick={() => onPageChange(item)}
-              className={`min-w-[32px] h-[32px] px-2.5 rounded-lg text-xs font-bold transition-all border flex items-center justify-center ${
+              className={`min-w-[30px] sm:min-w-[34px] h-[30px] sm:h-[34px] px-2 rounded-lg text-xs font-bold transition-all border flex items-center justify-center shrink-0 ${
                 isCurrent
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25'
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25 scale-105'
                   : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/40'
               }`}
             >
@@ -106,7 +109,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         type="button"
         onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+        className={`inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border shrink-0 ${
           currentPage === totalPages
             ? 'opacity-40 cursor-not-allowed bg-slate-900/40 border-white/5 text-slate-500'
             : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/50'
