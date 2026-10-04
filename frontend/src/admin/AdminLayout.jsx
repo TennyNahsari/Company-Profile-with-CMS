@@ -125,14 +125,19 @@ export default function AdminLayout({ user, onLogout, onCloseAdmin }) {
           </div>
 
           <div className="grid grid-cols-2 gap-2 pt-2">
-            <button
-              onClick={onCloseAdmin}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold"
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onCloseAdmin) onCloseAdmin();
+                window.location.href = '/';
+              }}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold cursor-pointer"
               title="Return to Public Website"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>Public Site</span>
-            </button>
+            </a>
 
             <button
               onClick={onLogout}

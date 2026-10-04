@@ -72,16 +72,14 @@ export default function App() {
 
   const handleCloseAdmin = () => {
     setInAdminPanel(false);
-    window.history.pushState({}, '', '/');
-    setCurrentPath('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setShowAdminLogin(false);
+    window.location.href = '/';
   };
 
   const handleCloseLogin = () => {
     setShowAdminLogin(false);
-    if (currentPath === '/admin' || currentPath === '/login') {
-      window.history.pushState({}, '', '/');
-      setCurrentPath('/');
+    if (window.location.pathname === '/admin' || window.location.pathname === '/login') {
+      window.location.href = '/';
     }
   };
 
@@ -89,15 +87,15 @@ export default function App() {
     setAdminUser(user);
     setShowAdminLogin(false);
     setInAdminPanel(true);
+    window.history.pushState({}, '', '/admin');
+    setCurrentPath('/admin');
   };
 
   const handleLogout = () => {
     apiService.logout();
     setAdminUser(null);
     setInAdminPanel(false);
-    window.history.pushState({}, '', '/');
-    setCurrentPath('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.location.href = '/';
   };
 
   const navigateToHome = () => {
