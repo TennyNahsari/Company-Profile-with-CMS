@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, Sparkles, AlertCircle, ArrowRight, Home } from 'lucide-react';
 import { apiService } from '../services/api';
 
 export default function AdminLogin({ onLoginSuccess, onClose }) {
@@ -21,6 +21,15 @@ export default function AdminLogin({ onLoginSuccess, onClose }) {
     } else {
       setError(res.message || 'Authentication failed.');
     }
+  };
+
+  const handleGoToLandingPage = (e) => {
+    e.preventDefault();
+    if (onClose) {
+      onClose();
+    }
+    window.history.pushState({}, '', '/');
+    window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
   return (
@@ -90,6 +99,18 @@ export default function AdminLogin({ onLoginSuccess, onClose }) {
             </button>
           </div>
         </form>
+
+        {/* Landing Page Link */}
+        <div className="mt-6 pt-4 border-t border-slate-800/80 text-center">
+          <a
+            href="/"
+            onClick={handleGoToLandingPage}
+            className="inline-flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-400 transition-colors py-1.5 px-3 rounded-xl hover:bg-slate-800/50"
+          >
+            <Home className="w-4 h-4 text-indigo-400" />
+            <span>Kembali ke Landing Page</span>
+          </a>
+        </div>
       </div>
     </div>
   );
