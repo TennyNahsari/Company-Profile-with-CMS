@@ -123,6 +123,7 @@ CREATE TABLE services (
     slug VARCHAR(200) UNIQUE NOT NULL,
     category_id INT REFERENCES service_categories(id) ON DELETE SET NULL,
     icon_name VARCHAR(100),
+    thumbnail_url TEXT,
     summary TEXT,
     description TEXT,
     features JSONB,
@@ -130,10 +131,10 @@ CREATE TABLE services (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO services (id, title, slug, category_id, icon_name, summary, description, features, order_index) VALUES
-(1, 'UI/UX Design Systems', 'ui-ux-design-systems', 1, 'Layout', 'Crafting intuitive user interfaces, interactive wireframes, and scalable brand design tokens for web and mobile platforms.', '<h2>Designing Experiences That Convert</h2><p>Our design team combines human-centered research with pixel-perfect visual design to create user interfaces that drive engagement and retention.</p>', '["User Research & Journey Mapping", "Interactive Prototyping in Figma", "Component Design System Tokens", "Accessibility & Usability Testing"]'::jsonb, 1),
-(2, 'React & Node Web Apps', 'react-node-web-apps', 2, 'Code', 'Full-stack application development using modern React 18, Vite, Express.js microservices, and PostgreSQL database architecture.', '<h2>High-Speed Technical Architecture</h2><p>We build ultra-fast, search engine optimized web platforms that handle enterprise traffic with ease.</p>', '["React 18 & Vite SPA Architecture", "Node & Express.js REST APIs", "PostgreSQL Database Design", "Production CPanel & Cloud Deployment"]'::jsonb, 2),
-(3, 'SEO & Digital Growth Marketing', 'seo-digital-growth-marketing', 3, 'TrendingUp', 'Data-driven search engine optimization, technical site audits, and targeted B2B client acquisition campaigns.', '<h2>Dominate Search Engine Rankings</h2><p>Increase your organic reach with our technical SEO audits, keyword research, and conversion rate optimization (CRO) strategies.</p>', '["Technical SEO & Core Web Vitals Audit", "Keyword Strategy & Content Architecture", "Conversion Rate Optimization (CRO)", "Analytics & Performance Tracking"]'::jsonb, 3)
+INSERT INTO services (id, title, slug, category_id, icon_name, thumbnail_url, summary, description, features, order_index) VALUES
+(1, 'UI/UX Design Systems', 'ui-ux-design-systems', 1, 'Layout', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000', 'Crafting intuitive user interfaces, interactive wireframes, and scalable brand design tokens for web and mobile platforms.', '<h2>Designing Experiences That Convert</h2><p>Our design team combines human-centered research with pixel-perfect visual design to create user interfaces that drive engagement and retention.</p>', '["User Research & Journey Mapping", "Interactive Prototyping in Figma", "Component Design System Tokens", "Accessibility & Usability Testing"]'::jsonb, 1),
+(2, 'React & Node Web Apps', 'react-node-web-apps', 2, 'Code', 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000', 'Full-stack application development using modern React 18, Vite, Express.js microservices, and PostgreSQL database architecture.', '<h2>High-Speed Technical Architecture</h2><p>We build ultra-fast, search engine optimized web platforms that handle enterprise traffic with ease.</p>', '["React 18 & Vite SPA Architecture", "Node & Express.js REST APIs", "PostgreSQL Database Design", "Production CPanel & Cloud Deployment"]'::jsonb, 2),
+(3, 'SEO & Digital Growth Marketing', 'seo-digital-growth-marketing', 3, 'TrendingUp', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000', 'Data-driven search engine optimization, technical site audits, and targeted B2B client acquisition campaigns.', '<h2>Dominate Search Engine Rankings</h2><p>Increase your organic reach with our technical SEO audits, keyword research, and conversion rate optimization (CRO) strategies.</p>', '["Technical SEO & Core Web Vitals Audit", "Keyword Strategy & Content Architecture", "Conversion Rate Optimization (CRO)", "Analytics & Performance Tracking"]'::jsonb, 3)
 ON CONFLICT (id) DO NOTHING;
 SELECT setval('services_id_seq', COALESCE((SELECT MAX(id) FROM services), 1));
 

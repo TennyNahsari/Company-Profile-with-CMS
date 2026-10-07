@@ -62,6 +62,19 @@ export default function ServiceDetailPage({ slug, onBack }) {
   const IconComponent = iconMap[service.icon_name] || Layout;
   const features = typeof service.features === 'string' ? JSON.parse(service.features) : (service.features || []);
 
+  const formatImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const base = typeof window !== 'undefined' && (window.location.port === '5173' || window.location.port === '3000')
+      ? 'http://localhost:5000'
+      : '';
+    return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
+  const thumbUrl = formatImageUrl(service.thumbnail_url);
+
   return (
     <article className="subpage-top-clearance min-h-screen pb-28 w-full flex flex-col items-center">
       <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-6xl">
@@ -79,7 +92,14 @@ export default function ServiceDetailPage({ slug, onBack }) {
 
         {/* SECTION 1: Hero Header Card */}
         <div className="glass-panel service-detail-hero-banner border border-indigo-500/30 shadow-2xl w-full relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
+          {thumbUrl ? (
+            <div className="relative w-full h-64 md:h-80 -mt-8 -mx-8 mb-6 overflow-hidden border-b border-white/10">
+              <img src={thumbUrl} alt={service.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#081425] via-[#081425]/40 to-transparent" />
+            </div>
+          ) : (
+            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
+          )}
 
           <div className="flex flex-col md:flex-row items-start md:items-center service-detail-hero-header">
             <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 shrink-0 shadow-lg">

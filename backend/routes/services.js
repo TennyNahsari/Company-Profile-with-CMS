@@ -17,6 +17,7 @@ let memoryServices = [
     slug: 'ui-ux-design',
     category_id: 1,
     icon_name: 'Layout',
+    thumbnail_url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000',
     summary: 'User-centric interface design and design systems tailored for seamless engagement.',
     description: 'We craft high-fidelity prototypes, interactive user flows, and enterprise design systems using our Aetheric Design methodology.',
     features: ['Design Systems', 'User Research & Testing', 'Wireframing & Prototyping', 'Mobile-First UX Strategy'],
@@ -28,6 +29,7 @@ let memoryServices = [
     slug: 'web-development',
     category_id: 2,
     icon_name: 'Code',
+    thumbnail_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000',
     summary: 'Scalable, modern web apps and high-speed platforms built with React, Node, and Cloud architecture.',
     description: 'Full-stack engineering leveraging cutting-edge frameworks, robust database design, and sub-second page performance.',
     features: ['React & Modern JS Frameworks', 'Node.js REST APIs', 'PostgreSQL & Database Optimization', 'CMS Architecture & CPanel Deployment'],
@@ -39,6 +41,7 @@ let memoryServices = [
     slug: 'digital-marketing',
     category_id: 3,
     icon_name: 'TrendingUp',
+    thumbnail_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000',
     summary: 'Data-driven performance marketing, SEO mastery, and conversion rate optimization.',
     description: 'Accelerate business growth through strategic paid campaigns, technical SEO, content strategies, and continuous A/B testing.',
     features: ['Search Engine Optimization (SEO)', 'Paid Search & Meta Ads', 'Conversion Rate Optimization (CRO)', 'Marketing Automation & Analytics'],
@@ -50,12 +53,20 @@ let memoryServices = [
     slug: 'brand-strategy',
     category_id: 4,
     icon_name: 'Sparkles',
+    thumbnail_url: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000',
     summary: 'Distinct visual identities, strategic messaging, and brand guidelines that resonate.',
     description: 'We elevate your market position with comprehensive brand strategy, visual style guides, and impactful digital collateral.',
     features: ['Brand Positioning & Tone of Voice', 'Visual Identity Systems', 'Digital Collateral & Assets', 'Brand Guidelines & Toolkits'],
     order_index: 4
   }
 ];
+
+// Ensure DB schema has thumbnail_url column
+(async () => {
+  try {
+    await db.query('ALTER TABLE services ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;');
+  } catch (e) {}
+})();
 
 // ==========================================
 // CATEGORIES ROUTES (MUST BE DEFINED FIRST)
@@ -129,15 +140,16 @@ router.get('/', async (req, res) => {
 
 // POST /api/services (Admin - Create)
 router.post('/', verifyToken, async (req, res) => {
-  const { title, slug, category_id, icon_name, summary, description, features, order_index } = req.body;
+  const { title, slug, category_id, icon_name, summary, description, features, order_index, thumbnail_url } = req.body;
   const featuresJson = typeof features === 'string' ? features : JSON.stringify(features || []);
   const cleanSlug = slug || title.toLowerCase().replace(/[^a-z0-9]/g, '-');
   const cleanCatId = (category_id && !isNaN(category_id)) ? parseInt(category_id) : null;
+  const cleanThumb = thumbnail_url || null;
   
   try {
     const result = await db.query(
-      'INSERT INTO services (title, slug, category_id, icon_name, summary, description, features, order_index) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0]
+      'INSERT INTO services (title, slug, category_id, icon_name, summary, description, features, order_index, thumbnail_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+      [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0, cleanThumb]
     );
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (err) {
@@ -148,6 +160,7 @@ router.post('/', verifyToken, async (req, res) => {
       slug: cleanSlug,
       category_id: cleanCatId,
       icon_name: icon_name || 'Layout',
+      thumbnail_url: cleanThumb,
       summary: summary || '',
       description: description || '',
       features: Array.isArray(features) ? features : JSON.parse(featuresJson),
@@ -187,19 +200,20 @@ router.get('/:id', async (req, res) => {
 // PUT /api/services/:id (Admin - Update Item)
 router.put('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
-  const { title, slug, category_id, icon_name, summary, description, features, order_index } = req.body;
+  const { title, slug, category_id, icon_name, summary, description, features, order_index, thumbnail_url } = req.body;
   const featuresJson = typeof features === 'string' ? features : JSON.stringify(features || []);
   const cleanSlug = slug || title.toLowerCase().replace(/[^a-z0-9]/g, '-');
   const cleanCatId = (category_id && !isNaN(category_id)) ? parseInt(category_id) : null;
+  const cleanThumb = thumbnail_url || null;
 
   try {
     const isIdNum = !isNaN(id);
     const queryStr = isIdNum
-      ? 'UPDATE services SET title = $1, slug = $2, category_id = $3, icon_name = $4, summary = $5, description = $6, features = $7, order_index = $8 WHERE id = $9 OR slug = $10 RETURNING *'
-      : 'UPDATE services SET title = $1, slug = $2, category_id = $3, icon_name = $4, summary = $5, description = $6, features = $7, order_index = $8 WHERE slug = $9 RETURNING *';
+      ? 'UPDATE services SET title = $1, slug = $2, category_id = $3, icon_name = $4, summary = $5, description = $6, features = $7, order_index = $8, thumbnail_url = $9 WHERE id = $10 OR slug = $11 RETURNING *'
+      : 'UPDATE services SET title = $1, slug = $2, category_id = $3, icon_name = $4, summary = $5, description = $6, features = $7, order_index = $8, thumbnail_url = $9 WHERE slug = $10 RETURNING *';
     const params = isIdNum 
-      ? [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0, parseInt(id), id]
-      : [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0, id];
+      ? [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0, cleanThumb, parseInt(id), id]
+      : [title, cleanSlug, cleanCatId, icon_name || 'Layout', summary || '', description || '', featuresJson, order_index || 0, cleanThumb, id];
 
     const result = await db.query(queryStr, params);
     if (result.rows.length === 0) {
@@ -216,6 +230,7 @@ router.put('/:id', verifyToken, async (req, res) => {
         slug: cleanSlug,
         category_id: cleanCatId,
         icon_name: icon_name || memoryServices[idx].icon_name,
+        thumbnail_url: cleanThumb !== undefined ? cleanThumb : memoryServices[idx].thumbnail_url,
         summary: summary || memoryServices[idx].summary,
         description: description || memoryServices[idx].description,
         features: Array.isArray(features) ? features : JSON.parse(featuresJson),

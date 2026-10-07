@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layers, Plus, Save, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Layers, Plus, Save, Trash2, CheckCircle2, AlertCircle, Image as ImageIcon, Upload, RefreshCw } from 'lucide-react';
 import { apiService } from '../services/api';
 import Pagination from '../components/Pagination';
 
@@ -8,6 +8,7 @@ export default function ServiceManager() {
   const [categories, setCategories] = useState([]);
   const [activeService, setActiveService] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -216,6 +217,90 @@ export default function ServiceManager() {
                     <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Service Thumbnail Upload */}
+              <div className="glass-card p-4 rounded-xl border border-white/10 space-y-3">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-indigo-400" />
+                  <span>Service Thumbnail Image (Engineered for Market Dominance Section)</span>
+                </label>
+                
+                <div className="flex flex-col md:flex-row items-center gap-4">
+                  {/* Thumbnail Preview Box */}
+                  <div className="relative w-full md:w-40 h-28 rounded-lg overflow-hidden border border-white/15 bg-slate-900 shrink-0 flex items-center justify-center">
+                    {activeService.thumbnail_url ? (
+                      <>
+                        <img 
+                          src={activeService.thumbnail_url} 
+                          alt="Thumbnail preview" 
+                          className="w-full h-full object-cover" 
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setActiveService({ ...activeService, thumbnail_url: '' })}
+                          className="absolute top-1 right-1 p-1 rounded bg-rose-600/80 hover:bg-rose-600 text-white text-[10px]"
+                          title="Remove thumbnail"
+                        >
+                          ✕
+                        </button>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-slate-500 text-[10px] p-2 text-center">
+                        <ImageIcon className="w-6 h-6 mb-1 opacity-50 text-indigo-400" />
+                        <span>No Thumbnail</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Actions & URL Input */}
+                  <div className="flex-1 space-y-2.5 w-full">
+                    <div className="flex items-center gap-2">
+                      <label className={`cursor-pointer inline-flex items-center justify-center gap-1.5 py-2 px-3.5 rounded-lg text-xs font-bold text-white transition-all ${
+                        uploading ? 'bg-indigo-700/50 opacity-70 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/30'
+                      }`}>
+                        {uploading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                        <span>{uploading ? 'Uploading...' : 'Upload Thumbnail File'}</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={async (e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            setUploading(true);
+                            setMsg('');
+                            setErrorMsg('');
+                            try {
+                              const res = await apiService.uploadMedia(file);
+                              const url = res.data?.url || (res.data?.filepath ? res.data.filepath : '');
+                              if (url) {
+                                setActiveService((prev) => ({ ...prev, thumbnail_url: url }));
+                                setMsg('Thumbnail image uploaded successfully!');
+                              } else {
+                                setErrorMsg('Failed to upload thumbnail image.');
+                              }
+                            } catch (err) {
+                              setErrorMsg('Error uploading thumbnail image.');
+                            } finally {
+                              setUploading(false);
+                              e.target.value = '';
+                            }
+                          }} 
+                          disabled={uploading} 
+                          className="hidden" 
+                        />
+                      </label>
+                    </div>
+
+                    <input 
+                      type="text" 
+                      placeholder="Or enter Image URL (https://...)" 
+                      value={activeService.thumbnail_url || ''} 
+                      onChange={(e) => setActiveService({ ...activeService, thumbnail_url: e.target.value })} 
+                      className="glass-input w-full text-xs font-mono text-indigo-300" 
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>

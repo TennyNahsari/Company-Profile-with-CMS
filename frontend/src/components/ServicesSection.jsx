@@ -48,6 +48,17 @@ export default function ServicesSection() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const formatImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const base = typeof window !== 'undefined' && (window.location.port === '5173' || window.location.port === '3000')
+      ? 'http://localhost:5000'
+      : '';
+    return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <section id="services" className="w-full relative flex flex-col items-center justify-center services-section-container">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
@@ -71,35 +82,67 @@ export default function ServicesSection() {
             const hasCategory = Boolean(service.category_name);
             const catName = service.category_name;
             const catSlug = service.category_slug || service.slug;
+            const thumbUrl = formatImageUrl(service.thumbnail_url);
 
             return (
               <div 
                 key={service.id || service.slug} 
                 onClick={() => handleServiceClick(service.slug)}
-                className="glass-card service-card-item group relative overflow-hidden cursor-pointer"
+                className="glass-card service-card-item group relative overflow-hidden cursor-pointer flex flex-col justify-between"
               >
                 {/* Background Accent Glow */}
                 <div className="absolute -top-12 -right-12 w-28 h-28 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition-all" />
 
                 <div>
-                  {hasCategory && (
-                    <div className="service-card-badge">
-                      <button
-                        onClick={(e) => handleCategoryClick(e, catSlug)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[11px] font-bold text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
-                        title={`View all services in category "${catName}"`}
-                      >
-                        <Tag className="w-3 h-3" />
-                        <span>{catName}</span>
-                      </button>
+                  {/* Service Thumbnail Image Header if present */}
+                  {thumbUrl ? (
+                    <div className="relative w-full h-44 -mt-2 -mx-2 mb-4 rounded-xl overflow-hidden border border-white/10 group-hover:border-indigo-500/40 transition-all shadow-md">
+                      <img 
+                        src={thumbUrl} 
+                        alt={service.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#081425] via-[#081425]/30 to-transparent" />
+                      
+                      {hasCategory && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <button
+                            onClick={(e) => handleCategoryClick(e, catSlug)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-indigo-500/30 text-[11px] font-bold text-indigo-300 hover:bg-indigo-600 hover:text-white transition-all shadow-lg"
+                            title={`View all services in category "${catName}"`}
+                          >
+                            <Tag className="w-3 h-3" />
+                            <span>{catName}</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="absolute bottom-3 left-3 z-10 w-10 h-10 rounded-xl bg-indigo-600/90 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
                     </div>
+                  ) : (
+                    <>
+                      {hasCategory && (
+                        <div className="service-card-badge">
+                          <button
+                            onClick={(e) => handleCategoryClick(e, catSlug)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[11px] font-bold text-indigo-400 hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
+                            title={`View all services in category "${catName}"`}
+                          >
+                            <Tag className="w-3 h-3" />
+                            <span>{catName}</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="service-card-icon-wrapper bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                    </>
                   )}
 
-                  <div className="service-card-icon-wrapper bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
-                    <IconComponent className="w-6 h-6" />
-                  </div>
-
-                  <h3 className="text-white flex items-center justify-between service-card-title">
+                  <h3 className="text-white flex items-center justify-between service-card-title mt-2">
                     <span>{service.title}</span>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-all shrink-0 ml-2" />
                   </h3>
