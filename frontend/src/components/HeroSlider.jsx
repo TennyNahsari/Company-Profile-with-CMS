@@ -36,8 +36,20 @@ export default function HeroSlider() {
 
   if (slides.length === 0) return null;
 
+  const formatBgUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const base = typeof window !== 'undefined' && (window.location.port === '5173' || window.location.port === '3000')
+      ? 'http://localhost:5000'
+      : '';
+    return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   const currentSlide = slides[currentIndex];
-  const activeBgImage = customHeroBg || currentSlide.image_url;
+  const rawBg = customHeroBg || currentSlide.image_url;
+  const activeBgImage = formatBgUrl(rawBg);
 
   return (
     <section id="hero" className="relative min-h-screen pt-36 pb-20 flex flex-col items-center justify-center overflow-hidden w-full text-center">
