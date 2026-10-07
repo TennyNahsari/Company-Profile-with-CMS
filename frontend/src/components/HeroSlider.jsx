@@ -53,12 +53,12 @@ export default function HeroSlider() {
 
   return (
     <section id="hero" className="relative min-h-screen pt-36 pb-20 flex flex-col items-center justify-center overflow-hidden w-full text-center">
-      {/* Background Image with Dark Vignette Overlay */}
+      {/* Background Image with Crisp Vignette Overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-30 filter blur-[1px]"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-75"
         style={{ backgroundImage: `url(${activeBgImage})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#081425]/90 via-[#081425]/80 to-[#081425]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#081425]/50 via-[#081425]/35 to-[#081425]/80" />
 
       <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex flex-col items-center justify-center">
         <div className="max-w-4xl mx-auto text-center flex flex-col items-center justify-center gap-6 w-full">
