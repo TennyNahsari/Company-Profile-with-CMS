@@ -64,6 +64,17 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
     );
   }
 
+  const formatImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const base = typeof window !== 'undefined' && (window.location.port === '5173' || window.location.port === '3000')
+      ? 'http://localhost:5000'
+      : '';
+    return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <article className="subpage-top-clearance category-page-container min-h-screen w-full flex flex-col items-center">
       <div className="custom-container mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -100,19 +111,34 @@ export default function ServiceCategoryPage({ categorySlug, onBack }) {
           {paginatedServices.map((service) => {
             const IconComponent = iconMap[service.icon_name] || Layout;
             const features = typeof service.features === 'string' ? JSON.parse(service.features) : (service.features || []);
+            const thumbUrl = formatImageUrl(service.thumbnail_url);
 
             return (
               <div 
-                key={service.id} 
+                key={service.id || service.slug} 
                 onClick={() => handleServiceDetailClick(service.slug)}
-                className="glass-card category-card-item service-card-item group relative overflow-hidden cursor-pointer"
+                className="glass-card category-card-item service-card-item group relative overflow-hidden cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="service-card-icon-wrapper bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
-                    <IconComponent className="w-6 h-6" />
-                  </div>
+                  {thumbUrl ? (
+                    <div className="relative w-full h-44 -mt-2 -mx-2 mb-4 rounded-xl overflow-hidden border border-white/10 group-hover:border-indigo-500/40 transition-all shadow-md">
+                      <img 
+                        src={thumbUrl} 
+                        alt={service.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#081425] via-[#081425]/30 to-transparent" />
+                      <div className="absolute bottom-3 left-3 z-10 w-10 h-10 rounded-xl bg-indigo-600/90 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="service-card-icon-wrapper bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                  )}
 
-                  <h3 className="text-white flex items-center justify-between service-card-title">
+                  <h3 className="text-white flex items-center justify-between service-card-title mt-2">
                     <span>{service.title}</span>
                     <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-all shrink-0 ml-2" />
                   </h3>

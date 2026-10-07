@@ -13,7 +13,7 @@ const iconMap = {
 export default function ServicesSection() {
   const [services, setServices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
 
   useEffect(() => {
     async function loadServices() {
