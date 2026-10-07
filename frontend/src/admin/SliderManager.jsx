@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Sliders, Plus, Trash2, Save, Image, Link, CheckCircle2 } from 'lucide-react';
+import { Sliders, Plus, Trash2, Save, Image, Link, CheckCircle2, Upload, RefreshCw } from 'lucide-react';
 import { apiService } from '../services/api';
 import Pagination from '../components/Pagination';
-import HeroBgManager from './HeroBgManager';
 
 export default function SliderManager() {
   const [sliders, setSliders] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const [newSlide, setNewSlide] = useState({
     title: '',
     subtitle: '',
@@ -68,9 +68,6 @@ export default function SliderManager() {
         <p className="text-xs text-slate-400 mt-1">Manage Homepage Image Carousel, Badges, and Call-to-Action Links</p>
       </div>
 
-      {/* Hero Background Image Upload Section */}
-      <HeroBgManager />
-
       {msg && <div className="p-3 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold">{msg}</div>}
 
       {/* Add New Slide Form */}
@@ -104,16 +101,88 @@ export default function SliderManager() {
             />
           </div>
 
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Background Image URL *</label>
-            <input 
-              type="text" 
-              required
-              placeholder="https://images.unsplash.com/..."
-              value={newSlide.image_url}
-              onChange={(e) => setNewSlide({ ...newSlide, image_url: e.target.value })}
-              className="glass-input w-full text-xs font-mono text-indigo-300"
-            />
+          {/* Background Image Upload & URL Input */}
+          <div className="md:col-span-2 space-y-2">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+              Background Slide Image *
+            </label>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              {/* Preview Thumbnail Box */}
+              <div className="relative w-full sm:w-44 h-28 rounded-xl overflow-hidden border border-white/15 bg-slate-900 shrink-0 flex items-center justify-center shadow-md">
+                {newSlide.image_url ? (
+                  <>
+                    <img 
+                      src={newSlide.image_url} 
+                      alt="Slide Preview" 
+                      className="w-full h-full object-cover" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setNewSlide({ ...newSlide, image_url: '' })}
+                      className="absolute top-1 right-1 p-1 rounded bg-rose-600/80 hover:bg-rose-600 text-white text-[10px]"
+                      title="Clear image"
+                    >
+                      ✕
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-slate-500 text-[10px] p-2 text-center">
+                    <Image className="w-6 h-6 mb-1 opacity-50 text-indigo-400" />
+                    <span>No Image Set</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Upload Actions & URL Input */}
+              <div className="flex-1 space-y-2.5 w-full">
+                <div className="flex items-center gap-3">
+                  <label className={`cursor-pointer inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl text-xs font-bold text-white transition-all ${
+                    uploading ? 'bg-indigo-700/50 opacity-70 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/30'
+                  }`}>
+                    {uploading ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Upload className="w-4 h-4" />
+                    )}
+                    <span>{uploading ? 'Mengupload...' : 'Pilih & Upload Gambar'}</span>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        setUploading(true);
+                        try {
+                          const res = await apiService.uploadMedia(file);
+                          const url = res.data?.url || (res.data?.filepath ? res.data.filepath : '');
+                          if (url) {
+                            setNewSlide((prev) => ({ ...prev, image_url: url }));
+                          }
+                        } catch (err) {
+                          console.error('Failed to upload slide image:', err);
+                        } finally {
+                          setUploading(false);
+                          e.target.value = '';
+                        }
+                      }} 
+                      disabled={uploading} 
+                      className="hidden" 
+                    />
+                  </label>
+                  <span className="text-[11px] text-slate-400">JPG, PNG, WEBP, SVG</span>
+                </div>
+
+                <input 
+                  type="text" 
+                  required
+                  placeholder="https://images.unsplash.com/..."
+                  value={newSlide.image_url}
+                  onChange={(e) => setNewSlide({ ...newSlide, image_url: e.target.value })}
+                  className="glass-input w-full text-xs font-mono text-indigo-300"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="md:col-span-2">
