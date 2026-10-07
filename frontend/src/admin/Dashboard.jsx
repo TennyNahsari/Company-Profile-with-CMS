@@ -4,6 +4,7 @@ import {
   TrendingUp, Database, Server, CheckCircle2, Plus, Tag, Layers, Briefcase 
 } from 'lucide-react';
 import { apiService } from '../services/api';
+import HeroBgManager from './HeroBgManager';
 
 export default function Dashboard({ onNavigate }) {
   const [stats, setStats] = useState({
@@ -49,6 +50,11 @@ export default function Dashboard({ onNavigate }) {
       <div className="cms-dashboard-header">
         <h1 className="font-extrabold text-white cms-dashboard-title">System Dashboard</h1>
         <p className="text-xs text-slate-400">Overview of Portfolio, Services, Categories, CMS Content & B2B Leads</p>
+      </div>
+
+      {/* Hero Landing Page Background Manager */}
+      <div className="mb-8">
+        <HeroBgManager />
       </div>
 
       {/* Metrics Grid */}

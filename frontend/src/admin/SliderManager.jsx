@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sliders, Plus, Trash2, Save, Image, Link, CheckCircle2 } from 'lucide-react';
 import { apiService } from '../services/api';
 import Pagination from '../components/Pagination';
+import HeroBgManager from './HeroBgManager';
 
 export default function SliderManager() {
   const [sliders, setSliders] = useState([]);
@@ -66,6 +67,9 @@ export default function SliderManager() {
         <h1 className="text-3xl font-extrabold text-white">Hero Slider Customizer</h1>
         <p className="text-xs text-slate-400 mt-1">Manage Homepage Image Carousel, Badges, and Call-to-Action Links</p>
       </div>
+
+      {/* Hero Background Image Upload Section */}
+      <HeroBgManager />
 
       {msg && <div className="p-3 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold">{msg}</div>}
 

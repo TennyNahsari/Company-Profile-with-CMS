@@ -5,15 +5,25 @@ import { apiService } from '../services/api';
 export default function HeroSlider() {
   const [slides, setSlides] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [customHeroBg, setCustomHeroBg] = useState(null);
 
   useEffect(() => {
-    async function loadSliders() {
-      const data = await apiService.getSliders();
-      if (data && data.length > 0) {
-        setSlides(data);
+    async function loadData() {
+      const [slidersData, heroSettingsData] = await Promise.all([
+        apiService.getSliders(),
+        apiService.getHeroSettings()
+      ]);
+
+      if (slidersData && slidersData.length > 0) {
+        setSlides(slidersData);
+      }
+      if (heroSettingsData?.hero_bg_url) {
+        setCustomHeroBg(heroSettingsData.hero_bg_url);
+      } else {
+        setCustomHeroBg(null);
       }
     }
-    loadSliders();
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -27,13 +37,14 @@ export default function HeroSlider() {
   if (slides.length === 0) return null;
 
   const currentSlide = slides[currentIndex];
+  const activeBgImage = customHeroBg || currentSlide.image_url;
 
   return (
     <section id="hero" className="relative min-h-screen pt-36 pb-20 flex flex-col items-center justify-center overflow-hidden w-full text-center">
       {/* Background Image with Dark Vignette Overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-25 filter blur-[2px]"
-        style={{ backgroundImage: `url(${currentSlide.image_url})` }}
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-30 filter blur-[1px]"
+        style={{ backgroundImage: `url(${activeBgImage})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#081425]/90 via-[#081425]/80 to-[#081425]" />
 

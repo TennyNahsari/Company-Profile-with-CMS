@@ -489,6 +489,80 @@ export const apiService = {
     }
   },
 
+  // Hero Background Settings
+  getHeroSettings: async () => {
+    try {
+      const res = await fetch(`${API_BASE}/settings/hero`);
+      const data = await res.json();
+      if (data?.data) {
+        localStorage.setItem('digi_hero_bg', JSON.stringify(data.data));
+        return data.data;
+      }
+    } catch (e) {}
+    const local = localStorage.getItem('digi_hero_bg');
+    return local ? JSON.parse(local) : { hero_bg_url: null };
+  },
+
+  saveHeroSettings: async (heroData) => {
+    try {
+      const res = await fetch(`${API_BASE}/settings/hero`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify(heroData)
+      });
+      const data = await res.json();
+      localStorage.setItem('digi_hero_bg', JSON.stringify(heroData));
+      return data;
+    } catch (e) {
+      localStorage.setItem('digi_hero_bg', JSON.stringify(heroData));
+      return { success: true, data: heroData };
+    }
+  },
+
+  uploadHeroBg: async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const token = localStorage.getItem('digi_token');
+      const res = await fetch(`${API_BASE}/settings/hero/upload`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      const data = await res.json();
+      if (data?.data) {
+        localStorage.setItem('digi_hero_bg', JSON.stringify(data.data));
+      }
+      return data;
+    } catch (e) {
+      // Fallback preview URL if offline
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          const heroData = { hero_bg_url: evt.target.result };
+          localStorage.setItem('digi_hero_bg', JSON.stringify(heroData));
+          resolve({ success: true, data: heroData });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  },
+
+  deleteHeroBg: async () => {
+    try {
+      const res = await fetch(`${API_BASE}/settings/hero`, {
+        method: 'DELETE',
+        headers: getHeaders()
+      });
+      const data = await res.json();
+      localStorage.removeItem('digi_hero_bg');
+      return data;
+    } catch (e) {
+      localStorage.removeItem('digi_hero_bg');
+      return { success: true, message: 'Hero background deleted successfully.', data: { hero_bg_url: null } };
+    }
+  },
+
   // Media Upload & Library
   getMedia: async () => {
     try {
