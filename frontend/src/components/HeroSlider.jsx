@@ -5,25 +5,15 @@ import { apiService } from '../services/api';
 export default function HeroSlider() {
   const [slides, setSlides] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [customHeroBg, setCustomHeroBg] = useState(null);
 
   useEffect(() => {
-    async function loadData() {
-      const [slidersData, heroSettingsData] = await Promise.all([
-        apiService.getSliders(),
-        apiService.getHeroSettings()
-      ]);
-
-      if (slidersData && slidersData.length > 0) {
-        setSlides(slidersData);
-      }
-      if (heroSettingsData?.hero_bg_url) {
-        setCustomHeroBg(heroSettingsData.hero_bg_url);
-      } else {
-        setCustomHeroBg(null);
+    async function loadSliders() {
+      const data = await apiService.getSliders();
+      if (data && data.length > 0) {
+        setSlides(data);
       }
     }
-    loadData();
+    loadSliders();
   }, []);
 
   useEffect(() => {
@@ -48,8 +38,7 @@ export default function HeroSlider() {
   };
 
   const currentSlide = slides[currentIndex];
-  const rawBg = customHeroBg || currentSlide.image_url;
-  const activeBgImage = formatBgUrl(rawBg);
+  const activeBgImage = formatBgUrl(currentSlide?.image_url);
 
   return (
     <section id="hero" className="relative min-h-screen pt-36 pb-20 flex flex-col items-center justify-center overflow-hidden w-full text-center">
